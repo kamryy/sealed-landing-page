@@ -22,6 +22,8 @@ WAITLIST_DB_PATH=./data/waitlist.sqlite
 
 If omitted, the app defaults to `./data/waitlist.sqlite`.
 
+On Vercel, if `WAITLIST_DB_PATH` is not set, it falls back to `/tmp/waitlist.sqlite` to avoid write-permission errors.
+
 ### 3. Test It Out
 
 ```bash
@@ -66,8 +68,10 @@ When ready to migrate to another database:
 
 When deploying:
 
-1. Persist your SQLite file storage (or mount a volume)
+1. Set `WAITLIST_DB_PATH=/tmp/waitlist.sqlite` if you want minimal setup
 2. Optionally set `WAITLIST_DB_PATH`
 3. Deploy!
+
+Important: `/tmp` on Vercel is ephemeral and not shared across instances, so data can be lost between deployments/restarts. For persistent production storage, use a managed database (e.g. Vercel Postgres, Supabase, Neon).
 
 That's it! Your waitlist is live. 🎉

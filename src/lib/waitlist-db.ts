@@ -12,7 +12,18 @@ declare global {
 
 function getDatabasePath() {
   const configuredPath = process.env.WAITLIST_DB_PATH?.trim();
-  return configuredPath || path.join(process.cwd(), 'data', 'waitlist.sqlite');
+
+  if (configuredPath) {
+    return path.isAbsolute(configuredPath)
+      ? configuredPath
+      : path.join(process.cwd(), configuredPath);
+  }
+
+  if (process.env.VERCEL) {
+    return '/tmp/waitlist.sqlite';
+  }
+
+  return path.join(process.cwd(), 'data', 'waitlist.sqlite');
 }
 
 function getDb() {
