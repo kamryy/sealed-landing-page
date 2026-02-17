@@ -64,9 +64,9 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center gap-6 px-4">
         {/* Keep it Sealed heading */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-nowrap items-center gap-3 md:gap-6">
           <h1
-            className="text-5xl font-medium text-white md:text-7xl lg:text-[76px]"
+            className="whitespace-nowrap text-5xl font-medium text-white md:text-7xl lg:text-[76px]"
             style={{
               textShadow: '0px 4px 7.4px rgba(251,251,251,0.33)',
             }}
