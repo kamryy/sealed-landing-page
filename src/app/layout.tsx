@@ -9,7 +9,7 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: 'Sealed - Keep it Sealed',
+  title: 'Sealed - Fully Anonymous Multi-Chain Messenger',
   description:
     'Fully anonymous, multi-chain end-to-end messenger. Coming soon.',
   icons: {
