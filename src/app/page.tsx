@@ -64,24 +64,27 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center gap-6 px-4">
         {/* Keep it Sealed heading */}
-        <div className="flex flex-nowrap items-center gap-3 md:gap-6">
-          <h1
-            className="whitespace-nowrap text-5xl font-medium text-white md:text-7xl lg:text-[76px]"
-            style={{
-              textShadow: '0px 4px 7.4px rgba(251,251,251,0.33)',
-            }}
+        <h1
+          className="flex flex-nowrap items-center gap-4 whitespace-nowrap text-[clamp(2rem,8vw,4.75rem)] font-medium text-white md:gap-6"
+          style={{
+            textShadow: '0px 4px 7.4px rgba(251,251,251,0.33)',
+          }}
+        >
+          <span>Keep it </span>
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 120 120"
+            className="h-[1.2em] w-[1.2em] shrink-0"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Keep it
-          </h1>
-          <Image
-            src="/assets/sealed-logo.svg"
-            alt="Sealed Logo"
-            width={412}
-            height={120}
-            className="h-[60px] w-auto md:h-[90px] lg:h-[120px]"
-            priority
-          />
-        </div>
+            <path
+              d="M52.3082 0.245538C63.0572 -0.751089 73.8681 1.29913 83.5124 6.16081L83.7403 6.27666L83.7445 6.27868C112.098 20.7642 123.378 55.5972 108.978 84.0669C95.3052 111.099 62.7781 122.538 35.3099 111.277L10.4524 119.68L27.3341 89.7793H9.58543C4.35304 81.8393 1.13578 72.7082 0.247669 63.188L0.246328 63.1779C-2.66838 31.3724 20.6188 3.19537 52.3063 0.245538H52.3082ZM66.0651 57.4533L57.1243 73.6179H36.2749L27.3334 89.7813H71.8143C80.7025 89.7813 87.9077 82.5448 87.9084 73.6179C87.9084 64.6906 80.7032 57.4533 71.8143 57.4533H66.0651ZM43.4272 25.1257C34.5389 25.1258 27.3335 32.3624 27.3334 41.2895C27.3336 50.2163 34.539 57.4531 43.4272 57.4533H48.2305L57.1719 41.2895H78.9673L87.9084 25.1257H43.4272Z"
+              fill="#6BFAD6"
+            />
+          </svg>
+          <span> Sealed</span>
+        </h1>
 
         {/* Coming Soon */}
         <p className="mt-4 text-3xl font-medium text-white md:text-4xl lg:text-[48px]">
