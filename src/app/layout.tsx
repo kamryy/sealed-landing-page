@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: 'Sealed - Keep it Sealed',
   description:
     'Fully anonymous, multi-chain end-to-end messenger. Coming soon.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
