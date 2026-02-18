@@ -55,7 +55,7 @@ export default function Home() {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden ">
       {/* Background with blur effect */}
-      <div className="absolute inset-0 backdrop-blur-[9.35px] bg-[rgba(0,75,58,0.08)]" />
+      <div className="absolute inset-0 backdrop-blur-[9.35px] bg-[rgba(0,12,9,0.16)]" />
 
       {/* Decorative glow elements */}
       <div className="absolute top-[-100px] left-[10%] h-[400px] w-[400px] rounded-full bg-[rgba(107,250,214,0.08)] blur-[120px]" />
