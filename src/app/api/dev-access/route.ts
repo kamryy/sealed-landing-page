@@ -5,10 +5,6 @@ export const runtime = 'nodejs';
 const DEV_ACCESS_COOKIE = 'sealed-dev-access';
 
 export async function POST(request: Request) {
-  if (process.env.NODE_ENV !== 'development') {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  }
-
   try {
     const body = (await request.json()) as { password?: string };
     const password = body.password?.trim();
