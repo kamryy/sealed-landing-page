@@ -50,7 +50,7 @@ function NavLinks({ mobile = false }: { mobile?: boolean }) {
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 lg:top-4 z-50 -mx-5 border border-white/5 bg-[#262626]/30 px-8 py-3 backdrop-blur-lg sm:px-12 lg:mx-0 lg:rounded-full lg:px-5 lg:py-4">
+    <header className="sticky top-0 z-50 -mx-5 border border-white/5 bg-[#262626]/30 px-8 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-lg sm:px-12 lg:top-4 lg:mx-0 lg:rounded-full lg:px-5 lg:py-4">
       <nav className="flex items-center justify-between gap-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2.5">
