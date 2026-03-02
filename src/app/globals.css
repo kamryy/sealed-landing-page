@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #0a0f0d;
+  --background: rgba(6, 9, 8, 1);
   --foreground: #ffffff;
 }
 
@@ -17,16 +17,59 @@
 
 body {
   background: var(--background);
-  background-image: url('/assets/background.png');
-  background-size: 100% auto;
-  background-position: top center;
-  background-repeat: no-repeat;
   color: var(--foreground);
-  font-family: 'Readex Pro', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
 }
 
-@media (max-width: 768px) {
-  body {
-    background-image: url('/assets/mobile_bg.png');
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-lexend), sans-serif;
+}
+
+@keyframes sealedLightPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes sealedHaloPulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    scale: 0.97;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.03;
+  }
+}
+
+@keyframes sealedGlobeCorePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 100px rgba(107, 250, 214, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 160px rgba(107, 250, 214, 0.32);
+  }
+}
+
+@keyframes sealedGlobePulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateX(18%) translateY(6%) scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(18%) translateY(6%) scale(1.06);
   }
 }

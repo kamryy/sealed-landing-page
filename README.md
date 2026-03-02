@@ -16,6 +16,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Development Access Gate
+
+In development, the homepage can be locked behind a password so visitors see the coming-soon screen by default.
+
+Create a `.env.local` file and set:
+
+```bash
+DEV_ACCESS_PASSWORD=your-dev-password
+```
+
+Then run `npm run dev`. Use the password field on the coming-soon page to unlock the full landing page.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

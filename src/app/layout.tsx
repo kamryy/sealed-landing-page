@@ -1,11 +1,17 @@
 import type { Metadata } from 'next';
-import { Readex_Pro } from 'next/font/google';
+import { DM_Sans, Lexend } from 'next/font/google';
 import './globals.css';
 
-const readexPro = Readex_Pro({
-  variable: '--font-readex-pro',
+const lexend = Lexend({
+  variable: '--font-lexend',
   subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
+});
+
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${readexPro.variable} antialiased`}>{children}</body>
+      <body className={`${lexend.variable} ${dmSans.variable} antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
