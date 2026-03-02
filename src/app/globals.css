@@ -73,3 +73,9 @@ h6 {
     transform: translateX(18%) translateY(6%) scale(1.06);
   }
 }
+
+@media (min-width: 768px) and (max-height: 880px) {
+  .section-two-stack {
+    margin-top: 0 !important;
+  }
+}

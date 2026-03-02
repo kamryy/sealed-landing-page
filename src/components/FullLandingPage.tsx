@@ -19,7 +19,7 @@ export default function FullLandingPage() {
         <div className="relative z-10 overflow-visible px-8 lg:px-4 ">
           <SectionOne />
         </div>
-        <div className="md:-mt-95 ">
+        <div className="section-two-stack md:-mt-95">
           <div className="relative z-30 overflow-visible px-8 lg:px-4 ">
             <SectionTwo />
           </div>
