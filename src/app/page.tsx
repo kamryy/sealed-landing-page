@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 export default async function Home() {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
-  if (!isDevelopment) {
+  if (isDevelopment) {
     return <FullLandingPage />;
   }
 
