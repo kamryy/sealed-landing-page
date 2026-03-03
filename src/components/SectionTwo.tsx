@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import GradientBadge from '@/components/GradientBadge';
+import SectionHeader from '@/components/SectionHeader';
 
 /* ──────────────────────────────────────────────────────────────────── *
  *  Feature card data
@@ -85,27 +85,12 @@ export default function SectionTwo() {
   return (
     <section className="flex flex-col items-center pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,10vw,7.5rem)]">
       {/* ── Header ─────────────────────────────────────────────── */}
-      <div className="flex w-full max-w-210 flex-col items-center gap-3.75 pt-[2.5px] text-center">
-        <GradientBadge>
-          <Image
-            src="/assets/icons/confirmation.svg"
-            alt=""
-            width={24}
-            height={24}
-          />
-          <p className="font-lexend text-[clamp(0.95rem,1.4vw,1.125rem)] font-light leading-[1.35] text-white">
-            Next-Gen Privacy
-          </p>
-        </GradientBadge>
-
-        <h2 className="mt-4 font-lexend text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.06] text-white">
-          A New Era of Secure Communication
-        </h2>
-
-        <p className="text-center text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3] lg:whitespace-nowrap">
-          Sealed delivers a modern approach to messaging built on advanced cryptography, ensuring complete privacy without servers or third-party access
-        </p>
-      </div>
+      <SectionHeader
+        badgeIcon="/assets/icons/confirmation.svg"
+        badgeText="Next-Gen Privacy"
+        title="A New Era of Secure Communication"
+        subtitle="Sealed delivers a modern approach to messaging built on advanced cryptography, ensuring complete privacy without servers or third-party access"
+      />
 
       {/* ── Content: photo + feature cards ─────────────────────── */}
       <div className="mt-[clamp(2rem,5vw,3.75rem)] flex w-full max-w-400 flex-col items-center gap-10 xl:flex-row xl:items-stretch xl:justify-center">

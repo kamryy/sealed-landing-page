@@ -35,11 +35,11 @@ function ZeroTraceHeader() {
         </p>
       </GradientBadge>
 
-      <h2 className="max-w-260 font-lexend text-[clamp(2rem,5.4vw,2.5rem)] font-bold leading-[1.06] text-white lg:max-w-none lg:whitespace-nowrap lg:text-[clamp(2.25rem,3vw,2.9rem)] mt-4">
+      <h2 className="max-w-260 text-balance font-lexend text-[clamp(2rem,5.4vw,2.5rem)] font-bold leading-[1.06] text-white lg:max-w-none lg:text-[clamp(2.25rem,3vw,2.9rem)] mt-4">
         Completely secure, untraceable communication
       </h2>
 
-      <p className="max-w-312.5 text-[clamp(1rem,2.2vw,1.25rem)] leading-[clamp(1.5rem,3vw,1.875rem)] text-[#b3b3b3]">
+      <p className="max-w-312.5 text-balance text-[clamp(1rem,2.2vw,1.25rem)] leading-[clamp(1.5rem,3vw,1.875rem)] text-[#b3b3b3]">
         Sealed solution ensures total privacy by enabling communication that
         cannot be monitored, tracked, or accessed by any third party.
       </p>

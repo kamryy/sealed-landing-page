@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import CTASection from '@/components/CTASection';
-import GradientBadge from '@/components/GradientBadge';
+import SectionHeader from '@/components/SectionHeader';
 
 const STATES = [
   {
@@ -89,7 +89,7 @@ export default function SectionThree() {
     const rect = scrubArea.getBoundingClientRect();
     const viewport = window.innerHeight;
     // Start scrubbing when the scrub area top reaches 70% down the viewport (earlier trigger)
-    const lockStartY = viewport * 0.5;
+    const lockStartY = viewport * 0.55;
     // End scrubbing when the scrub area bottom is near the bottom of viewport
     const lockEndY = viewport * 0.95;
 
@@ -360,30 +360,17 @@ export default function SectionThree() {
   return (
     <section className="flex flex-col items-center pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,10vw,7.5rem)]">
       <div className="flex w-full max-w-210 flex-col items-center gap-3.75 pt-[2.5px] text-center">
-        <GradientBadge>
-          <Image
-            src="/assets/icons/confirmation.svg"
-            alt=""
-            width={24}
-            height={24}
-          />
-          <p className="font-lexend text-[clamp(0.95rem,1.4vw,1.125rem)] font-light leading-[1.35] text-white">
-            Uncensored Expression
-          </p>
-        </GradientBadge>
-
-        <h2 className="mt-4 md:whitespace-nowrap font-lexend text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.06] text-white">
-          Freedom to Speak Without Control
-        </h2>
-
-        <p className="text-center text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3] lg:whitespace-nowrap">
-          Sealed empowers users to communicate openly and securely without censorship, surveillance, or external interference
-        </p>
+        <SectionHeader
+          badgeIcon="/assets/icons/confirmation.svg"
+          badgeText="Uncensored Expression"
+          title="Freedom to Speak Without Control"
+          subtitle="Sealed empowers users to communicate openly and securely without censorship, surveillance, or external interference"
+        />
       </div>
 
       <div
         ref={scrubAreaRef}
-        className="mt-12 hidden h-[110vh] w-full max-w-400 md:block"
+        className="mt-12 hidden h-[100vh] w-full max-w-400 md:block"
       >
         <div className="sticky top-0 flex h-screen items-start pt-2">
           <div className="w-full">
@@ -473,7 +460,7 @@ export default function SectionThree() {
             </div>
 
             {/* Desktop CTA - inside sticky container */}
-            <div ref={ctaRef} className="mt-64">
+            <div ref={ctaRef} className="mt-48">
               <CTASection />
             </div>
           </div>

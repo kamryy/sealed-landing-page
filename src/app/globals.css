@@ -90,13 +90,18 @@ h6 {
     margin-top: 0rem;
   }
 }
+@media (max-width: 767px) {
+  .section-two-stack {
+    margin-top: 0rem;
+  }
+}
 
 /* Above 900px — negative margin that scales with height,
    maxing out at -23.75rem (-380px ≈ -mt-95) on tall screens */
-@media (min-height: 1000px) {
+@media (min-height: 1000px) and (min-width: 767px) {
   .section-two-stack {
     /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: clamp(-21.75rem, calc(-30vh + 0.5rem), 0px);
+    margin-top: clamp(-20.75rem, calc(-24vh + 0.5rem), 0px);
   }
 }
 
@@ -113,7 +118,13 @@ h6 {
 
 @media (min-height: 1000px) {
   .section-four-stack {
-    margin-top: clamp(-12rem, calc(-22vh + 0.5rem), 0px);
+    margin-top: clamp(-6rem, calc(-10vh), 0px);
+  }
+}
+
+@media (min-width: 767px) {
+  .section-four-stack {
+    margin-top: clamp(-12rem, calc(-30vh), 0px);
   }
 }
 

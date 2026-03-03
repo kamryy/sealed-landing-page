@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import SectionHeader from '@/components/SectionHeader';
+
 const listItems = [
   '45% of all staking rewards are allocated directly to revenue sharing',
   'Passive income generated without active trading or management',
@@ -15,38 +17,13 @@ const utilityListItems = [
 export default function SectionFour() {
   return (
     <section className="relative mt-16 flex flex-col items-center gap-4 px-4 pt-0.5 lg:mt-0 lg:px-0">
-      {/* Header Badge */}
-      <div
-        className="flex items-center gap-1.5 rounded-full border border-sealed-teal py-2 pl-2.5 pr-4 md:py-2.5 md:pl-3 md:pr-5"
-        style={{
-          backgroundImage:
-            'linear-gradient(94.44deg, rgba(107, 250, 214, 0.15) 18.6%, rgba(202, 115, 68, 0.15) 96.15%), linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%)',
-        }}
-      >
-        <div className="relative h-5 w-5 md:h-6 md:w-6">
-          <Image
-            src="/assets/icons/check-circle.svg"
-            alt=""
-            fill
-            className="object-contain"
-          />
-        </div>
-        <span className="whitespace-nowrap font-lexend text-sm font-light leading-5 text-white md:text-lg md:leading-6">
-          Earn with Every Message
-        </span>
-      </div>
-
-      {/* Title */}
-      <h2 className="text-center font-lexend text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl lg:leading-[45px]">
-        Token-Powered Earnings &amp; Benefits
-      </h2>
-
-      {/* Subtitle */}
-      <p className="text-center font-dm-sans text-base leading-6 text-[#b3b3b3] md:text-lg md:leading-7 lg:whitespace-nowrap lg:text-xl lg:leading-[30px]">
-        Discover how the token combines passive income opportunities with
-        practical subscription benefits to maximize both earnings and everyday
-        utility
-      </p>
+      {/* Header */}
+      <SectionHeader
+        badgeIcon="/assets/icons/check-circle.svg"
+        badgeText="Earn with Every Message"
+        title="Token-Powered Earnings & Benefits"
+        subtitle="Discover how the token combines passive income opportunities with practical subscription benefits to maximize both earnings and everyday utility"
+      />
 
       {/* Content Section */}
       <div className="mt-8 flex w-full flex-col items-center gap-10 lg:mt-14 lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
