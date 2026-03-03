@@ -102,10 +102,8 @@ export default function SectionTwo() {
           A New Era of Secure Communication
         </h2>
 
-        <p className="max-w-277 text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3]">
-          Sealed delivers a modern approach to messaging built on advanced
-          cryptography, ensuring complete privacy without servers or third-party
-          access
+        <p className="text-center text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3] lg:whitespace-nowrap">
+          Sealed delivers a modern approach to messaging built on advanced cryptography, ensuring complete privacy without servers or third-party access
         </p>
       </div>
 

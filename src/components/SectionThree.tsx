@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import CTASection from '@/components/CTASection';
 import GradientBadge from '@/components/GradientBadge';
 
 const STATES = [
@@ -50,9 +51,13 @@ const STATES = [
 
 export default function SectionThree() {
   const scrubAreaRef = useRef<HTMLDivElement | null>(null);
+  const ctaRef = useRef<HTMLDivElement | null>(null);
   const desktopSlideContentRef = useRef<HTMLDivElement | null>(null);
   const mobileTabsRef = useRef<HTMLDivElement | null>(null);
   const progressRef = useRef(0);
+  const snappedStepRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const hasCompletedRef = useRef(false);
   const [progress, setProgress] = useState(0);
   const [isScrollLocked, setIsScrollLocked] = useState(false);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -62,130 +67,229 @@ export default function SectionThree() {
   const [isMobileSwitching, setIsMobileSwitching] = useState(false);
 
   const maxStep = STATES.length - 1;
+  const DWELL_WINDOW = 0.1;
+  const DWELL_RELEASE_WINDOW = 0.1;
 
   const setSlideByIndex = (index: number) => {
     const clampedIndex = Math.max(0, Math.min(maxStep, index));
     const nextProgress = maxStep === 0 ? 0 : clampedIndex / maxStep;
 
     progressRef.current = nextProgress;
+    snappedStepRef.current = clampedIndex;
     setProgress(nextProgress);
     setIsScrollLocked(false);
   };
+
+  const getScrubState = useCallback(() => {
+    const scrubArea = scrubAreaRef.current;
+    if (!scrubArea) {
+      return { canScrub: false, beforeLockStart: true, afterLockEnd: false };
+    }
+
+    const rect = scrubArea.getBoundingClientRect();
+    const viewport = window.innerHeight;
+    // Start scrubbing when the scrub area top reaches 70% down the viewport (earlier trigger)
+    const lockStartY = viewport * 0.5;
+    // End scrubbing when the scrub area bottom is near the bottom of viewport
+    const lockEndY = viewport * 0.95;
+
+    return {
+      canScrub: rect.top <= lockStartY && rect.bottom >= lockEndY,
+      beforeLockStart: rect.top > lockStartY,
+      afterLockEnd: rect.bottom < lockEndY,
+    };
+  }, []);
+
+  const applyProgress = useCallback(
+    (next: number) => {
+      const clamped = Math.max(0, Math.min(1, next));
+      progressRef.current = clamped;
+
+      // Mark as completed when reaching the end
+      if (clamped >= 1) {
+        hasCompletedRef.current = true;
+      }
+
+      const continuousRaw = clamped * maxStep;
+      const nearestStep = Math.round(continuousRaw);
+
+      if (
+        snappedStepRef.current == null &&
+        Math.abs(continuousRaw - nearestStep) <= DWELL_WINDOW / 2
+      ) {
+        snappedStepRef.current = nearestStep;
+      }
+
+      if (snappedStepRef.current != null) {
+        const snapped = snappedStepRef.current;
+        if (
+          continuousRaw < snapped - DWELL_RELEASE_WINDOW / 2 ||
+          continuousRaw > snapped + DWELL_RELEASE_WINDOW / 2
+        ) {
+          snappedStepRef.current = null;
+        }
+      }
+
+      setProgress(clamped);
+      setIsScrollLocked(clamped > 0 && clamped < 1);
+    },
+    [maxStep]
+  );
 
   useEffect(() => {
     progressRef.current = progress;
   }, [progress]);
 
   useEffect(() => {
-    const applyProgress = (next: number) => {
-      const clamped = Math.max(0, Math.min(1, next));
-      progressRef.current = clamped;
-      setProgress(clamped);
-      setIsScrollLocked(clamped > 0 && clamped < 1);
-    };
-
-    const getScrubState = () => {
-      const scrubArea = scrubAreaRef.current;
-      if (!scrubArea) {
-        return {
-          inLockWindow: false,
-          before: false,
-          after: false,
-        };
-      }
-
-      const rect = scrubArea.getBoundingClientRect();
-      const viewport = window.innerHeight;
-      const lockStartY = viewport * 0.32;
-      const lockEndY = viewport * 0.92;
-
-      return {
-        inLockWindow: rect.top <= lockStartY && rect.bottom >= lockEndY,
-        before: rect.top > lockStartY,
-        after: rect.bottom < lockEndY,
-      };
-    };
-
     const onScroll = () => {
       const state = getScrubState();
-
-      if (state.before) {
+      if (state.beforeLockStart) {
         if (progressRef.current !== 0) applyProgress(0);
+        // Reset completed flag when scrolling back above the section
+        hasCompletedRef.current = false;
         setIsScrollLocked(false);
         return;
       }
-
-      if (state.after) {
+      if (state.afterLockEnd) {
         if (progressRef.current !== 1) applyProgress(1);
         setIsScrollLocked(false);
       }
     };
 
-    const shouldHandleScrubAtPoint = (clientX: number, clientY: number) => {
-      const scrubArea = scrubAreaRef.current;
-      if (!scrubArea) return false;
-
-      const scrubRect = scrubArea.getBoundingClientRect();
-      const isInsideScrubArea =
-        clientX >= scrubRect.left &&
-        clientX <= scrubRect.right &&
-        clientY >= scrubRect.top &&
-        clientY <= scrubRect.bottom;
-
-      if (!isInsideScrubArea) return false;
-
+    const isOverSlideContent = (clientX: number, clientY: number) => {
       const slideContent = desktopSlideContentRef.current;
-      if (!slideContent) return true;
+      if (!slideContent) return false;
 
       const slideRect = slideContent.getBoundingClientRect();
-      const isOverSlideContent =
+      return (
         clientX >= slideRect.left &&
         clientX <= slideRect.right &&
         clientY >= slideRect.top &&
-        clientY <= slideRect.bottom;
+        clientY <= slideRect.bottom
+      );
+    };
 
-      return !isOverSlideContent;
+    const isOverCTA = (clientX: number, clientY: number) => {
+      const cta = ctaRef.current;
+      if (!cta) return false;
+
+      const rect = cta.getBoundingClientRect();
+      return (
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom
+      );
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (!shouldHandleScrubAtPoint(e.clientX, e.clientY)) {
+      // Don't trigger animation when over CTA
+      if (isOverCTA(e.clientX, e.clientY)) {
+        return;
+      }
+
+      if (isOverSlideContent(e.clientX, e.clientY)) {
         setIsScrollLocked(false);
         return;
       }
 
       const state = getScrubState();
-      if (!state.inLockWindow) {
+      if (!state.canScrub) {
         setIsScrollLocked(false);
         return;
       }
 
-      const delta = e.deltaY * 0.0016;
-      const current = progressRef.current;
-      const next = Math.max(0, Math.min(1, current + delta));
+      // If animation completed and user is scrolling down, don't re-lock
+      if (hasCompletedRef.current && e.deltaY > 0) {
+        setIsScrollLocked(false);
+        return;
+      }
 
-      if (next !== current) {
+      // If scrolling up, allow re-entering the animation
+      if (hasCompletedRef.current && e.deltaY < 0 && progressRef.current >= 1) {
+        hasCompletedRef.current = false;
+      }
+
+      const delta = e.deltaY * 0.0014;
+      const next = Math.max(0, Math.min(1, progressRef.current + delta));
+
+      if (next !== progressRef.current) {
         e.preventDefault();
         applyProgress(next);
         return;
       }
 
-      const leavingStart = current <= 0 && e.deltaY < 0;
-      const leavingEnd = current >= 1 && e.deltaY > 0;
+      const leavingStart = progressRef.current <= 0 && e.deltaY < 0;
+      const leavingEnd = progressRef.current >= 1 && e.deltaY > 0;
       setIsScrollLocked(!(leavingStart || leavingEnd));
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartYRef.current = e.touches[0]?.clientY ?? null;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      // Don't trigger animation when over CTA
+      if (isOverCTA(touch.clientX, touch.clientY)) {
+        return;
+      }
+
+      const state = getScrubState();
+      if (!state.canScrub) {
+        setIsScrollLocked(false);
+        return;
+      }
+
+      const startY = touchStartYRef.current;
+      const currentY = touch.clientY;
+      if (startY == null) return;
+
+      const swipeDirection = startY - currentY; // positive = scrolling down
+
+      // If animation completed and user is swiping down, don't re-lock
+      if (hasCompletedRef.current && swipeDirection > 0) {
+        setIsScrollLocked(false);
+        return;
+      }
+
+      // If swiping up, allow re-entering the animation
+      if (
+        hasCompletedRef.current &&
+        swipeDirection < 0 &&
+        progressRef.current >= 1
+      ) {
+        hasCompletedRef.current = false;
+      }
+
+      const delta = swipeDirection * 0.0024;
+      const next = Math.max(0, Math.min(1, progressRef.current + delta));
+
+      if (next !== progressRef.current) {
+        e.preventDefault();
+        touchStartYRef.current = currentY;
+        applyProgress(next);
+      }
     };
 
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
       setIsScrollLocked(false);
     };
-  }, []);
+  }, [getScrubState, applyProgress]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth < 640) return;
@@ -272,15 +376,14 @@ export default function SectionThree() {
           Freedom to Speak Without Control
         </h2>
 
-        <p className="max-w-277 text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3]">
-          Sealed empowers users to communicate openly and securely without
-          censorship, surveillance, or external interference
+        <p className="text-center text-[clamp(1rem,2.2vw,1.25rem)] leading-7.5 text-[#b3b3b3] lg:whitespace-nowrap">
+          Sealed empowers users to communicate openly and securely without censorship, surveillance, or external interference
         </p>
       </div>
 
       <div
         ref={scrubAreaRef}
-        className="mt-12 hidden h-[260vh] w-full max-w-400 md:block"
+        className="mt-12 hidden h-[110vh] w-full max-w-400 md:block"
       >
         <div className="sticky top-0 flex h-screen items-start pt-2">
           <div className="w-full">
@@ -368,6 +471,11 @@ export default function SectionThree() {
                 </div>
               </div>
             </div>
+
+            {/* Desktop CTA - inside sticky container */}
+            <div ref={ctaRef} className="mt-64">
+              <CTASection />
+            </div>
           </div>
         </div>
       </div>
@@ -441,6 +549,11 @@ export default function SectionThree() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile CTA */}
+      <div className="mt-24 w-full md:hidden">
+        <CTASection />
       </div>
     </section>
   );

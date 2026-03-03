@@ -1,6 +1,7 @@
 import BackgroundEffects from '@/components/BackgroundEffects';
 import HeroSection from '@/components/HeroSection';
 import Navbar from '@/components/Navbar';
+import SectionFour from '@/components/SectionFour';
 import SectionOne from '@/components/SectionOne';
 import SectionThree from '@/components/SectionThree';
 import SectionTwo from '@/components/SectionTwo';
@@ -19,13 +20,16 @@ export default function FullLandingPage() {
         <div className="relative z-10 overflow-visible px-8 lg:px-4 ">
           <SectionOne />
         </div>
-        <div className="section-two-stack md:-mt-95">
+        <div className="section-two-stack">
           <div className="relative z-30 overflow-visible px-8 lg:px-4 ">
             <SectionTwo />
           </div>
           <div className="relative z-30 overflow-visible px-8 lg:px-4">
             <SectionThree />
           </div>
+        </div>
+        <div className="section-four-stack relative z-30 overflow-visible px-8 lg:px-4">
+          <SectionFour />
         </div>
       </div>
     </main>

@@ -74,8 +74,78 @@ h6 {
   }
 }
 
-@media (min-width: 768px) and (max-height: 880px) {
+/* Section-two margin — three viewport-height tiers:
+   < 720px  → positive margin (push apart)
+   720–900  → no margin
+   > 900px  → negative margin (pull together, up to -380px) */
+
+/* Default: below 720px — add spacing */
+.section-two-stack {
+  margin-top: 12rem;
+}
+
+/* 720px – 900px — neutral, no margin */
+@media (min-height: 720px) {
   .section-two-stack {
-    margin-top: 0 !important;
+    margin-top: 0rem;
   }
+}
+
+/* Above 900px — negative margin that scales with height,
+   maxing out at -23.75rem (-380px ≈ -mt-95) on tall screens */
+@media (min-height: 1000px) {
+  .section-two-stack {
+    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
+    margin-top: clamp(-21.75rem, calc(-30vh + 0.5rem), 0px);
+  }
+}
+
+/* Section-four margin to counter SectionThree scrub/CTA height */
+.section-four-stack {
+  margin-top: 8rem;
+}
+
+@media (min-height: 720px) {
+  .section-four-stack {
+    margin-top: 0rem;
+  }
+}
+
+@media (min-height: 1000px) {
+  .section-four-stack {
+    margin-top: clamp(-12rem, calc(-22vh + 0.5rem), 0px);
+  }
+}
+
+/* Animated rainbow glow for CTA section */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gradient-rotate {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+.rainbow-glow-animated {
+  animation: gradient-rotate 8s linear infinite;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    #00d4aa,
+    #22d3ee,
+    #8b5cf6,
+    #d946ef,
+    #f97316,
+    #eab308,
+    #22c55e,
+    #00d4aa
+  );
+  filter: blur(80px);
+  opacity: 0.6;
 }
