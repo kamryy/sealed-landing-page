@@ -28,18 +28,19 @@ export default function SectionFour() {
       {/* Content Section */}
       <div className="mt-8 flex w-full flex-col items-center gap-10 lg:mt-14 lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
         {/* Left - Dashboard Image */}
-        <div
-          className="relative aspect-[4/3] w-full max-w-[520px] shrink-0 overflow-hidden rounded-2xl border border-sealed-teal lg:aspect-[16/11] lg:w-[480px] xl:w-[520px]"
-          style={{
-            background: 'rgba(0, 0, 0, 0.4)',
-          }}
-        >
-          <Image
-            src="/assets/section_four/photo_1.png"
-            alt="Sealed Dashboard Preview"
-            fill
-            className="object-cover object-top"
-          />
+        <div className="w-full max-w-[520px] shrink-0 rounded-3xl bg-[linear-gradient(93.5866deg,rgba(107,250,214,1)_18.598%,rgba(202,115,68,1)_96.15%)] p-px lg:w-[480px] xl:w-[520px]">
+          <div
+            className="relative aspect-[4/3] overflow-hidden rounded-[calc(1.5rem-1px)] lg:aspect-[16/11]"
+            style={{
+              background: 'rgba(0, 0, 0, 0.4)',
+            }}
+          >
+            <Image
+              src="/assets/section_four/photo_1.png"
+              alt="Sealed Dashboard Preview"
+              fill
+              className="object-cover object-top"
+            />
           {/* Bottom gradient overlay */}
           <div
             className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 lg:h-40"
@@ -58,6 +59,7 @@ export default function SectionFour() {
               filter: 'blur(40px)',
             }}
           />
+          </div>
         </div>
 
         {/* Right - Content */}
@@ -148,18 +150,20 @@ export default function SectionFour() {
         </div>
 
         {/* Right - Token Image */}
-        <div
-          className="relative aspect-[750/571] w-full max-w-[520px] shrink-0 overflow-hidden rounded-2xl border border-sealed-teal lg:aspect-[750/571] lg:w-[480px] xl:w-[520px]"
-          style={{
-            background: 'black',
-          }}
-        >
-          <Image
-            src="/assets/section_four/photo_2.png"
-            alt="Token Coin"
-            fill
-            className="object-cover"
-          />
+        <div className="w-full max-w-[520px] shrink-0 rounded-3xl bg-[linear-gradient(93.5866deg,rgba(107,250,214,1)_18.598%,rgba(202,115,68,1)_96.15%)] p-px lg:w-[480px] xl:w-[520px]">
+          <div
+            className="relative aspect-[750/571] overflow-hidden rounded-[calc(1.5rem-1px)] lg:aspect-[750/571]"
+            style={{
+              background: 'black',
+            }}
+          >
+            <Image
+              src="/assets/section_four/photo_2.png"
+              alt="Token Coin"
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>
