@@ -22,7 +22,7 @@ export default function HeroSection() {
           </GradientBadge>
         </div>
 
-        <h1 className="mt-4 text-[clamp(2rem,5.8vw,4rem)] font-medium leading-[1.12] text-white">
+        <h1 className="mt-4 text-[clamp(1.75rem,5.8vw,4rem)] font-medium leading-[1.12] text-white">
           Fully anonymous,
           <br />
           Multi-chain End-2-End

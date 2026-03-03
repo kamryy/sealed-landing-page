@@ -105,26 +105,32 @@ h6 {
   }
 }
 
-/* Section-four margin to counter SectionThree scrub/CTA height */
 .section-four-stack {
-  margin-top: 8rem;
+  /* Default: add spacing on smaller screens to prevent overlap with Section Three's scrub/CTA */
+  margin-top: 4vh;
 }
-
-@media (min-height: 720px) {
+/* Section-four margin to counter SectionThree scrub/CTA height */
+@media (max-height: 700px) {
   .section-four-stack {
-    margin-top: 0rem;
+    margin-top: -20vh;
   }
 }
 
-@media (min-height: 1000px) {
+@media (max-width: 767px) {
   .section-four-stack {
-    margin-top: clamp(-6rem, calc(-10vh), 0px);
+    margin-top: 5vh;
   }
 }
 
 @media (min-width: 767px) {
   .section-four-stack {
-    margin-top: clamp(-12rem, calc(-30vh), 0px);
+    margin-top: -30vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-four-stack {
+    margin-top: -20vh;
   }
 }
 

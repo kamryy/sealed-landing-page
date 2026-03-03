@@ -40,10 +40,7 @@ function ChatActions() {
 /** Left chat card — shows an encrypted outgoing message. */
 export function SenderChatPreview() {
   return (
-    <div
-      className="absolute left-[-2%] top-[54%] z-20 w-62 origin-top-left rounded-[23px] bg-[#0f0f0f]/95 px-4.5 py-3.75 shadow-[0_20px_45px_rgba(0,0,0,0.4)] backdrop-blur-sm"
-      style={{ transform: 'scale(clamp(0.6, 1.5vw + 0.3, 1))' }}
-    >
+    <div className="absolute left-[-2%] top-[54%] z-20 w-62 origin-top-left scale-[0.65] rounded-[23px] bg-[#0f0f0f]/95 px-4.5 py-3.75 shadow-[0_20px_45px_rgba(0,0,0,0.4)] backdrop-blur-sm sm:scale-[0.7] md:scale-[0.85] lg:scale-100">
       <div className="space-y-1.75 bg-[#0f0e13] pb-1.75">
         <div className="space-y-1.75">
           {/* Incoming message */}
@@ -93,10 +90,7 @@ export function SenderChatPreview() {
 /** Right chat card — shows a plain-text conversation with typing indicator. */
 export function ReceiverChatPreview() {
   return (
-    <div
-      className="absolute right-[-3%] top-[16%] z-30 w-62 origin-top-right rounded-[23px] bg-[#0f0f0f]/95 px-4.5 py-3.75 shadow-[0_20px_45px_rgba(0,0,0,0.4)] backdrop-blur-sm"
-      style={{ transform: 'scale(clamp(0.6, 1.5vw + 0.3, 1))' }}
-    >
+    <div className="absolute right-[-3%] top-[16%] z-30 w-62 origin-top-right scale-[0.65] rounded-[23px] bg-[#0f0f0f]/95 px-4.5 py-3.75 shadow-[0_20px_45px_rgba(0,0,0,0.4)] backdrop-blur-sm sm:scale-[0.7] md:scale-[0.85] lg:scale-100">
       <div className="space-y-1.75 bg-[#0f0e13] pb-1.75">
         <div className="space-y-1.75">
           {/* Own outgoing message */}
