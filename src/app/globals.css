@@ -74,63 +74,76 @@ h6 {
   }
 }
 
-/* Section-two margin — three viewport-height tiers:
-   < 720px  → positive margin (push apart)
-   720–900  → no margin
-   > 900px  → negative margin (pull together, up to -380px) */
-
-/* Default: below 720px — add spacing */
 .section-two-stack {
-  margin-top: 12rem;
+  margin-top: 550px;
 }
 
-/* 720px – 900px — neutral, no margin */
-@media (min-height: 720px) {
-  .section-two-stack {
-    margin-top: 0rem;
-  }
-}
-@media (max-width: 767px) {
-  .section-two-stack {
-    margin-top: 0rem;
-  }
-}
-
-/* Above 900px — negative margin that scales with height,
-   maxing out at -23.75rem (-380px ≈ -mt-95) on tall screens */
-@media (min-height: 1000px) and (min-width: 767px) {
+@media (min-height: 700px) {
   .section-two-stack {
     /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: clamp(-20.75rem, calc(-24vh + 0.5rem), 0px);
+    margin-top: 100px;
+  }
+}
+
+@media (min-height: 800px) {
+  .section-two-stack {
+    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
+    margin-top: 00px;
+  }
+}
+
+@media (min-height: 1000px) {
+  .section-two-stack {
+    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
+    margin-top: -300px;
+  }
+}
+/* Above 900px — negative margin that scales with height,
+   maxing out at -23.75rem (-380px ≈ -mt-95) on tall screens */
+@media (min-height: 1200px) {
+  .section-two-stack {
+    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
+    margin-top: -400px;
   }
 }
 
 .section-four-stack {
   /* Default: add spacing on smaller screens to prevent overlap with Section Three's scrub/CTA */
-  margin-top: 4vh;
+  margin-top: 400px;
 }
-/* Section-four margin to counter SectionThree scrub/CTA height */
-@media (max-height: 700px) {
+
+@media (min-height: 600px) {
   .section-four-stack {
-    margin-top: -20vh;
+    /* Reduce spacing on medium screens where the scrub/CTA is less likely to overlap */
+    margin-top: 300px;
   }
 }
 
-@media (max-width: 767px) {
+@media (min-height: 720px) {
   .section-four-stack {
-    margin-top: 5vh;
+    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
+    margin-top: 200px;
   }
 }
 
-@media (min-width: 767px) {
+@media (min-height: 850px) {
   .section-four-stack {
-    margin-top: -30vh;
+    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
+    margin-top: 100px;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-height: 1000px) {
   .section-four-stack {
-    margin-top: -20vh;
+    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
+    margin-top: -100px;
+  }
+}
+
+@media (min-height: 1200px) {
+  .section-four-stack {
+    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
+    margin-top: -200px;
   }
 }
 

@@ -41,24 +41,24 @@ export default function SectionFour() {
               fill
               className="object-cover object-top"
             />
-          {/* Bottom gradient overlay */}
-          <div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 lg:h-40"
-            style={{
-              background:
-                'linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, black 66.445%)',
-              filter: 'blur(40px)',
-            }}
-          />
-          {/* Left gradient overlay */}
-          <div
-            className="pointer-events-none absolute bottom-0 left-0 top-0 w-16 lg:w-24"
-            style={{
-              background:
-                'linear-gradient(to right, black 33.555%, rgba(0, 0, 0, 0.6) 100%)',
-              filter: 'blur(40px)',
-            }}
-          />
+            {/* Bottom gradient overlay */}
+            <div
+              className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 lg:h-40"
+              style={{
+                background:
+                  'linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, black 66.445%)',
+                filter: 'blur(40px)',
+              }}
+            />
+            {/* Left gradient overlay */}
+            <div
+              className="pointer-events-none absolute bottom-0 left-0 top-0 w-16 lg:w-24"
+              style={{
+                background:
+                  'linear-gradient(to right, black 33.555%, rgba(0, 0, 0, 0.6) 100%)',
+                filter: 'blur(40px)',
+              }}
+            />
           </div>
         </div>
 
