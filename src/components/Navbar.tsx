@@ -22,7 +22,7 @@ function NavLinks({ mobile = false }: { mobile?: boolean }) {
 
         <a
           href="#"
-          className="mt-2 block rounded-lg bg-sealed-teal px-3 py-2 text-center text-sm font-medium text-black"
+          className="mt-2 block rounded-lg bg-sealed-teal px-3 py-2 text-center text-sm font-semibold text-black"
         >
           Sign up
         </a>
@@ -70,7 +70,7 @@ export default function Navbar() {
         {/* Desktop CTA */}
         <a
           href="#"
-          className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-medium text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
+          className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-semibold text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
         >
           Sign up
         </a>

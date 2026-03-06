@@ -161,7 +161,7 @@ export default function DevComingSoonGate() {
             />
             <button
               type="submit"
-              className="cursor-pointer rounded-xl bg-sealed-teal-70 px-8 py-2.5 text-base font-medium text-white transition-all hover:bg-[rgba(107,250,214,0.9)] hover:shadow-[0_0_20px_rgba(107,250,214,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="cursor-pointer rounded-xl bg-sealed-teal-70 px-8 py-2.5 text-base font-semibold text-white transition-all hover:bg-[rgba(107,250,214,0.9)] hover:shadow-[0_0_20px_rgba(107,250,214,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Joining...' : 'Submit'}
@@ -197,7 +197,7 @@ export default function DevComingSoonGate() {
           />
           <button
             type="submit"
-            className="w-full max-w-52 cursor-pointer rounded-xl border border-sealed-teal/50 bg-black/40 px-6 py-2.5 text-sm font-medium text-sealed-teal transition-colors hover:bg-sealed-teal/15 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+            className="w-full max-w-52 cursor-pointer rounded-xl border border-sealed-teal/50 bg-black/40 px-6 py-2.5 text-sm font-semibold text-sealed-teal transition-colors hover:bg-sealed-teal/15 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
             disabled={isUnlocking}
           >
             {isUnlocking ? 'Unlocking...' : 'Open Full Landing'}

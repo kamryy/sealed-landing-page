@@ -1,4 +1,5 @@
 import BackgroundEffects from '@/components/BackgroundEffects';
+import FAQSection from '@/components/FAQSection';
 import HeroSection from '@/components/HeroSection';
 import Navbar from '@/components/Navbar';
 import SectionFive from '@/components/SectionFive';
@@ -34,6 +35,9 @@ export default function FullLandingPage() {
         </div>
         <div className="relative z-30 overflow-visible px-8 lg:px-4">
           <SectionFive />
+        </div>
+        <div className="relative z-30 overflow-visible px-8 lg:px-4">
+          <FAQSection />
         </div>
       </div>
     </main>

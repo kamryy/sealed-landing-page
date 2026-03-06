@@ -403,7 +403,7 @@ export default function SectionThree() {
                         className={isActive ? 'opacity-100' : 'opacity-60'}
                       />
                       <p
-                        className={`font-semibold leading-none whitespace-nowrap ${
+                        className={`font-bold leading-none whitespace-nowrap ${
                           isActive ? 'text-white' : 'text-white/60'
                         }`}
                       >
@@ -496,7 +496,7 @@ export default function SectionThree() {
                     className={isActive ? 'opacity-100' : 'opacity-60'}
                   />
                   <p
-                    className={`font-semibold leading-none whitespace-nowrap ${
+                    className={`font-bold leading-none whitespace-nowrap ${
                       isActive ? 'text-white' : 'text-white/60'
                     }`}
                   >

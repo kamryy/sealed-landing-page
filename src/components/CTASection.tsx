@@ -101,7 +101,7 @@ export default function CTASection() {
           {/* CTA Button */}
           <button
             type="button"
-            className="w-full shrink-0 rounded-[12.5px] bg-sealed-teal px-[18.75px] py-[12.5px] font-lexend text-lg font-medium leading-[31.25px] text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-sealed-teal/20 lg:w-auto"
+            className="w-full shrink-0 rounded-[12.5px] bg-sealed-teal px-[18.75px] py-[12.5px] font-lexend text-lg font-semibold leading-[31.25px] text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-sealed-teal/20 lg:w-auto"
           >
             Sign up
           </button>

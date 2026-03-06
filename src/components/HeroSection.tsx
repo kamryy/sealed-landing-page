@@ -38,7 +38,7 @@ export default function HeroSection() {
 
         <a
           href="#"
-          className="mt-10 flex w-full justify-center rounded-xl bg-sealed-teal px-6 py-3 text-lg font-medium text-black transition-transform duration-200 hover:scale-[1.02] sm:inline-flex sm:w-auto"
+          className="mt-10 flex w-full justify-center rounded-xl bg-sealed-teal px-6 py-3 text-lg font-semibold text-black transition-transform duration-200 hover:scale-[1.02] sm:inline-flex sm:w-auto"
         >
           Sign up
         </a>

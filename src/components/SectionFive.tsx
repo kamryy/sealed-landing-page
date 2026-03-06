@@ -2,7 +2,7 @@
 
 import SectionHeader from '@/components/SectionHeader';
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 type BoxContent = '1' | '2' | '3' | '4' | '5';
 type StepIndex = 0 | 1 | 2 | 3 | 4;
@@ -60,14 +60,14 @@ function Box({ content, isActive, onHover, onLeave }: BoxProps) {
     <div
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      className={`flex w-full max-w-[380px] cursor-pointer flex-col items-center gap-2.5 rounded-[15px] p-7 shadow-sm transition-all duration-300 ${
+      className={`flex w-full max-w-[300px] cursor-pointer flex-col items-center gap-2 rounded-[15px] p-5 shadow-sm transition-all duration-300 xl:max-w-[340px] xl:gap-2.5 xl:p-6 2xl:max-w-[380px] 2xl:p-7 ${
         isActive
-          ? 'bg-gradient-to-br from-transparent to-[#1a1a1a]'
+          ? 'bg-gradient-to-br from-[#1C1C1C] to-[#1C1C1C]'
           : 'bg-gradient-to-br from-transparent to-[rgba(26,26,26,0.2)]'
       }`}
       style={{
         backgroundImage: isActive
-          ? 'linear-gradient(206deg, rgba(26, 26, 26, 0) 0%, rgb(26, 26, 26) 40%), linear-gradient(90deg, rgb(28, 28, 28) 0%, rgb(28, 28, 28) 100%)'
+          ? 'linear-gradient(206deg, rgba(18, 18, 18, 0.95) 0%, rgba(18, 18, 18, 0.95) 40%), linear-gradient(90deg, rgba(28, 28, 28, 1) 0%, rgba(28, 28, 28, 1) 100%)'
           : 'linear-gradient(199deg, rgba(26, 26, 26, 0) 0%, rgba(26, 26, 26, 0.2) 40%), linear-gradient(90deg, rgba(28, 28, 28, 0.2) 0%, rgba(28, 28, 28, 0.2) 100%)',
       }}
     >
@@ -92,7 +92,7 @@ function Box({ content, isActive, onHover, onLeave }: BoxProps) {
 
       {/* Title */}
       <p
-        className={`text-center text-2xl font-bold leading-10 transition-colors duration-300 ${
+        className={`text-center text-xl font-bold leading-8 transition-colors duration-300 xl:text-[22px] xl:leading-9 2xl:text-2xl 2xl:leading-10 ${
           isActive ? 'text-white' : 'text-[#929090]'
         }`}
       >
@@ -105,7 +105,7 @@ function Box({ content, isActive, onHover, onLeave }: BoxProps) {
           isActive ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-center text-base font-normal leading-relaxed text-[#b3b3b3]">
+        <p className="text-center text-sm font-normal leading-relaxed text-[#b3b3b3] xl:text-[15px] 2xl:text-base">
           {boxData.description}
         </p>
       </div>
@@ -129,7 +129,7 @@ function MobileCard({ content, isActive, onClick }: MobileCardProps) {
       className={`flex w-full cursor-pointer flex-col items-center gap-2.5 rounded-[15px] px-5 py-7 shadow-sm backdrop-blur-md transition-all duration-300`}
       style={{
         backgroundImage: isActive
-          ? 'linear-gradient(203deg, rgba(26, 26, 26, 0) 0%, rgba(26, 26, 26, 0.85) 40%), linear-gradient(90deg, rgba(28, 28, 28, 0.7) 0%, rgba(28, 28, 28, 0.7) 100%)'
+          ? 'linear-gradient(203deg, rgba(28, 28, 28, 0.95) 0%, rgba(28, 28, 28, 0.95) 40%), linear-gradient(90deg, rgba(28, 28, 28, 1) 0%, rgba(28, 28, 28, 1) 100%)'
           : 'linear-gradient(198deg, rgba(26, 26, 26, 0) 0%, rgba(26, 26, 26, 0.3) 40%), linear-gradient(90deg, rgba(28, 28, 28, 0.3) 0%, rgba(28, 28, 28, 0.3) 100%)',
       }}
     >
@@ -214,7 +214,11 @@ function MobileStepView({ currentStep, onStepChange }: MobileStepViewProps) {
       clearTimeout(scrollTimeout);
 
       // When scrolling down and the container is in view
-      if (isScrollingDown && rect.top < viewportHeight * 0.3 && rect.bottom > viewportHeight * 0.5) {
+      if (
+        isScrollingDown &&
+        rect.top < viewportHeight * 0.3 &&
+        rect.bottom > viewportHeight * 0.5
+      ) {
         scrollTimeout = setTimeout(() => {
           if (currentStep < 4) {
             onStepChange(((currentStep + 1) % 5) as StepIndex);
@@ -222,7 +226,11 @@ function MobileStepView({ currentStep, onStepChange }: MobileStepViewProps) {
         }, 150);
       }
       // When scrolling up
-      else if (!isScrollingDown && rect.top < viewportHeight * 0.5 && rect.bottom > viewportHeight * 0.5) {
+      else if (
+        !isScrollingDown &&
+        rect.top < viewportHeight * 0.5 &&
+        rect.bottom > viewportHeight * 0.5
+      ) {
         scrollTimeout = setTimeout(() => {
           if (currentStep > 0) {
             onStepChange(((currentStep - 1 + 5) % 5) as StepIndex);
@@ -241,41 +249,56 @@ function MobileStepView({ currentStep, onStepChange }: MobileStepViewProps) {
   return (
     <div ref={containerRef} className="relative">
       {/* Circle diagram - positioned behind cards */}
-      <div className="pointer-events-none absolute left-1/2 top-0 z-0 flex h-[280px] w-[280px] -translate-x-1/2 items-center justify-center">
+      <div className="pointer-events-none absolute left-1/2 top-0 z-0 flex aspect-square w-[120vw] max-w-[1000px] -translate-x-1/2 items-center justify-center">
         {/* Background circle */}
         <Image
           src="/assets/section_five/circle-bg.png"
           alt=""
-          width={280}
-          height={280}
-          className="opacity-90"
+          width={600}
+          height={600}
+          className="h-full w-full object-contain opacity-50"
           priority
         />
 
+        {/* Sealed logo at the center of the circle */}
+        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+          <Image
+            src="/assets/sealed-logo.svg"
+            alt="Sealed logo"
+            width={88}
+            height={88}
+            className="h-10 w-10 "
+            priority
+          />
+        </div>
+
         {/* Cone Indicator */}
         <div className="pointer-events-none absolute inset-0">
-          <ConeIndicator rotation={rotationAngles[currentContent]} />
+          <ConeIndicator
+            rotation={rotationAngles[currentContent]}
+            visible={true}
+          />
         </div>
 
         {/* Left person */}
-        <div className="absolute left-[25%] top-[8%] -translate-x-1/2 -translate-y-1/2">
-          <div className="flex size-9 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
+        <div className="absolute left-[25%] top-[13%] -translate-x-1/2 -translate-y-1/2">
+          <div className="flex size-12 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
             <Image
               src="/assets/section_five/person.svg"
               alt=""
-              width={20}
-              height={20}
+              width={25}
+              height={25}
             />
           </div>
         </div>
         {/* Right person */}
-        <div className="absolute left-[75%] top-[8%] -translate-x-1/2 -translate-y-1/2">
-          <div className="flex size-9 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
+        <div className="absolute left-[75%] top-[13%] -translate-x-1/2 -translate-y-1/2">
+          <div className="flex size-12 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
             <Image
               src="/assets/section_five/person.svg"
               alt=""
-              width={20}
-              height={20}
+              width={25}
+              height={25}
             />
           </div>
         </div>
@@ -291,7 +314,7 @@ function MobileStepView({ currentStep, onStepChange }: MobileStepViewProps) {
       </div>
 
       {/* Cards container - only shows current and next */}
-      <div className="relative z-10 flex flex-col gap-4 px-1 pt-20">
+      <div className="relative z-10 flex flex-col gap-4 px-1 pt-[35vw] sm:pt-[30vw]">
         {/* Current active card - click to go back */}
         <MobileCard
           content={currentContent}
@@ -338,10 +361,18 @@ const rotationAngles: Record<BoxContent | 'default', number> = {
 };
 
 // Large cone/wedge indicator with message icon at the tip
-function ConeIndicator({ rotation }: { rotation: number }) {
+function ConeIndicator({
+  rotation,
+  visible = true,
+}: {
+  rotation: number;
+  visible?: boolean;
+}) {
+  const gradientId = useId().replace(/:/g, '-');
+
   return (
     <div
-      className="pointer-events-none absolute inset-0 transition-transform duration-500 ease-out"
+      className={`pointer-events-none absolute inset-0 transition-all duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
       style={{
         transform: `rotate(${rotation}deg)`,
         transformOrigin: 'center center',
@@ -350,38 +381,36 @@ function ConeIndicator({ rotation }: { rotation: number }) {
       <svg
         viewBox="0 0 600 600"
         fill="none"
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 h-full w-full "
       >
         <defs>
           {/* Gradient for the cone fill */}
-          <linearGradient id="coneGradient" x1="50%" y1="50%" x2="50%" y2="0%">
-            <stop offset="0%" stopColor="#6bfad6" stopOpacity="0.35" />
-            <stop offset="50%" stopColor="#6bfad6" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#6bfad6" stopOpacity="0.02" />
+          <linearGradient
+            id={gradientId}
+            x1="300"
+            y1="300"
+            x2="300"
+            y2="60"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#6bfad6" stopOpacity="0.4" />
+            <stop offset="50%" stopColor="#6bfad6" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#6bfad6" stopOpacity="0.05" />
           </linearGradient>
-          {/* Glow filter */}
-          <filter id="coneGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
-        {/* Main cone/wedge shape - originates from center (300,300) pointing to top */}
+        {/* Main cone/wedge shape with background fill */}
         <path
-          d="M 300 300 L 240 40 L 360 40 Z"
-          fill="url(#coneGradient)"
-          filter="url(#coneGlow)"
+          d="M 300 300 L 180 60 A 286.5 286.5 0 0 1 420 60 Z"
+          fill={`url(#${gradientId})`}
         />
 
         {/* Edge lines of the cone */}
         <line
           x1="300"
           y1="300"
-          x2="240"
-          y2="40"
+          x2="180"
+          y2="60"
           stroke="#6bfad6"
           strokeWidth="1"
           opacity="0.3"
@@ -389,8 +418,8 @@ function ConeIndicator({ rotation }: { rotation: number }) {
         <line
           x1="300"
           y1="300"
-          x2="360"
-          y2="40"
+          x2="420"
+          y2="60"
           stroke="#6bfad6"
           strokeWidth="1"
           opacity="0.3"
@@ -422,7 +451,7 @@ function ConeIndicator({ rotation }: { rotation: number }) {
       {/* Message bubble image at the tip */}
       <div
         className="absolute left-1/2 top-[8%]"
-        style={{ transform: `translate(-40%, -60%) rotate(${-rotation}deg)` }}
+        style={{ transform: `translate(-50%, -60%) rotate(${-rotation}deg)` }}
       >
         <Image
           src="/assets/section_five/message_bubble.png"
@@ -437,7 +466,7 @@ function ConeIndicator({ rotation }: { rotation: number }) {
 }
 
 export default function SectionFive() {
-  const [activeBox, setActiveBox] = useState<BoxContent | null>('1');
+  const [activeBox, setActiveBox] = useState<BoxContent | null>(null);
   const [mobileStep, setMobileStep] = useState<StepIndex>(0);
 
   // Get rotation angle for current active box
@@ -461,24 +490,39 @@ export default function SectionFive() {
       </div>
 
       {/* Desktop Interactive Diagram Container - hidden on mobile */}
-      <div className="relative mt-12 hidden h-[900px] w-full max-w-[1600px] lg:block">
+      <div className="relative -mt-10 hidden h-[760px] w-full max-w-[1200px] lg:block xl:h-[840px] xl:max-w-[1360px] 2xl:h-[900px] 2xl:max-w-[1600px]">
         {/* Central Circle Background */}
-        <div className="absolute left-1/2 top-[200px] -translate-x-1/2">
+        <div className="absolute left-1/2 top-[150px] -translate-x-1/2 xl:top-[180px] 2xl:top-[200px]">
           <Image
             src="/assets/section_five/circle-bg.png"
             alt=""
             width={600}
             height={600}
-            className="opacity-90"
+            className="h-[500px] w-[500px] object-contain opacity-50 xl:h-[550px] xl:w-[550px] 2xl:h-[600px] 2xl:w-[600px]"
             priority
           />
 
-          {/* Rotating Cone Indicator with message icon */}
-          <ConeIndicator rotation={currentRotation} />
+          {/* Sealed logo at the center of the circle */}
+          <div className="absolute left-1/2 ml-0.5 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+            <Image
+              src="/assets/sealed-logo.svg"
+              alt="Sealed logo"
+              width={36}
+              height={36}
+              className="h-10 w-10"
+              priority
+            />
+          </div>
+
+          {/* Rotating Cone Indicator with message icon - only visible when hovering */}
+          <ConeIndicator
+            rotation={currentRotation}
+            visible={activeBox !== null}
+          />
 
           {/* Person Icons - sitting on top of circle border */}
           {/* Left person - top-left-center */}
-          <div className="absolute left-[30%] top-[10%] -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-[30%] top-[10%]  -translate-x-1/2 -translate-y-1/2">
             <div className="flex size-14 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
               <Image
                 src="/assets/section_five/person.svg"
@@ -490,7 +534,7 @@ export default function SectionFive() {
           </div>
           {/* Right person - top-right-center */}
           <div className="absolute left-[70%] top-[10%] -translate-x-1/2 -translate-y-1/2">
-            <div className="flex size-14 items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
+            <div className="flex size-14  items-center justify-center rounded-full border border-sealed-teal bg-sealed-teal/10 backdrop-blur-sm">
               <Image
                 src="/assets/section_five/person.svg"
                 alt=""
@@ -511,7 +555,7 @@ export default function SectionFive() {
         </div>
 
         {/* Box 1 - Top Right: Secure exchange of access keys */}
-        <div className="absolute right-[2%] top-[200px] xl:right-[-5%]">
+        <div className="absolute right-0 top-[170px] xl:right-[1%] xl:top-[190px] 2xl:right-[-5%] 2xl:top-[200px]">
           <Box
             content="1"
             isActive={activeBox === '1'}
@@ -521,7 +565,7 @@ export default function SectionFive() {
         </div>
 
         {/* Box 5 - Top Left: Local decryption */}
-        <div className="absolute left-[2%] top-[200px] xl:left-[-5%]">
+        <div className="absolute left-0 top-[170px] xl:left-[1%] xl:top-[190px] 2xl:left-[-5%] 2xl:top-[200px]">
           <Box
             content="5"
             isActive={activeBox === '5'}
@@ -531,7 +575,7 @@ export default function SectionFive() {
         </div>
 
         {/* Box 2 - Bottom Right: End-to-end encryption */}
-        <div className="absolute bottom-[80px] right-[2%] xl:right-[-5%]">
+        <div className="absolute bottom-[150px] right-0 xl:bottom-[120px] xl:right-[1%] 2xl:bottom-[80px] 2xl:right-[-5%]">
           <Box
             content="2"
             isActive={activeBox === '2'}
@@ -541,7 +585,7 @@ export default function SectionFive() {
         </div>
 
         {/* Box 3 - Bottom Center: Submitting encrypted message */}
-        <div className="absolute bottom-[-180px] left-1/2 -translate-x-1/2">
+        <div className="absolute -bottom-[80px] left-1/2 -translate-x-1/2 xl:-bottom-[130px] 2xl:-bottom-[190px]">
           <Box
             content="3"
             isActive={activeBox === '3'}
@@ -551,7 +595,7 @@ export default function SectionFive() {
         </div>
 
         {/* Box 4 - Bottom Left: Data retrieval */}
-        <div className="absolute bottom-[80px] left-[2%] xl:left-[-5%]">
+        <div className="absolute bottom-[150px] left-0 xl:bottom-[120px] xl:left-[1%] 2xl:bottom-[80px] 2xl:left-[-5%]">
           <Box
             content="4"
             isActive={activeBox === '4'}

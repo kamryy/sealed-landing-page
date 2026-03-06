@@ -144,7 +144,7 @@ export default function SectionFour() {
           </div>
 
           {/* Sign up Button */}
-          <button className="mx-auto mt-2 w-fit rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-medium text-black transition-opacity hover:opacity-90 md:px-6 md:py-3.5 md:text-lg lg:mx-0">
+          <button className="mx-auto mt-2 w-fit rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-semibold text-black transition-opacity hover:opacity-90 md:px-6 md:py-3.5 md:text-lg lg:mx-0">
             Sign up
           </button>
         </div>
