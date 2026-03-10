@@ -33,11 +33,11 @@ export default function CTASection() {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       {/* Animated Rainbow Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-3 z-0"
+        className="pointer-events-none absolute -inset-0 z-0  overflow-visible"
       >
         <div
           ref={glowRef}

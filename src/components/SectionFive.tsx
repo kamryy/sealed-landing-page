@@ -475,7 +475,10 @@ export default function SectionFive() {
     : rotationAngles['default'];
 
   return (
-    <section className="relative mt-16 flex flex-col items-center gap-4 px-5 pt-0.5 lg:mt-24 lg:px-0">
+    <section
+      id="how-it-works"
+      className="relative mt-16 flex flex-col items-center gap-4 px-5 pt-0.5 lg:mt-24 lg:px-0"
+    >
       {/* Header */}
       <SectionHeader
         badgeIcon="/assets/icons/check-circle.svg"

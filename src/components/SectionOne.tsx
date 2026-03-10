@@ -312,6 +312,7 @@ export default function SectionOne() {
 
   return (
     <section
+      id="features"
       ref={sectionRef}
       className="relative flex flex-col items-center overflow-visible"
     >

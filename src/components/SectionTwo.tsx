@@ -83,7 +83,10 @@ function FeatureCard({
 
 export default function SectionTwo() {
   return (
-    <section className="flex flex-col items-center pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,10vw,7.5rem)]">
+    <section
+      id="benefits"
+      className="flex flex-col items-center pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,10vw,7.5rem)]"
+    >
       {/* ── Header ─────────────────────────────────────────────── */}
       <SectionHeader
         badgeIcon="/assets/icons/confirmation.svg"

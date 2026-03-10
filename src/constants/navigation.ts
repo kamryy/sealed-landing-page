@@ -5,10 +5,10 @@ export interface NavLink {
 }
 
 export const NAV_LINKS: NavLink[] = [
-  { label: 'Home', href: '#', isActive: true },
-  { label: 'Features', href: '#' },
-  { label: 'Benefits', href: '#' },
-  { label: 'How it works', href: '#' },
-  { label: 'FAQ', href: '#' },
-  { label: 'Contact', href: '#' },
+  { label: 'Home', href: '/', isActive: true },
+  { label: 'Features', href: '#features' },
+  { label: 'Benefits', href: '#benefits' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Contact', href: '/contact' },
 ];

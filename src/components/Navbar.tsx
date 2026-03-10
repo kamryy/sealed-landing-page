@@ -21,7 +21,7 @@ function NavLinks({ mobile = false }: { mobile?: boolean }) {
         ))}
 
         <a
-          href="#"
+          href="#whitelist"
           className="mt-2 block rounded-lg bg-sealed-teal px-3 py-2 text-center text-sm font-semibold text-black"
         >
           Sign up
@@ -53,7 +53,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 -mx-5 border border-white/5 bg-[#262626]/30 px-8 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-lg sm:px-12 lg:top-4 lg:mx-0 lg:rounded-full lg:px-5 lg:py-4">
       <nav className="flex items-center justify-between gap-4">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5">
+        <a href="/" className="flex items-center gap-2.5">
           <Image
             src="/assets/sealed-logo.svg"
             alt="Sealed"
@@ -69,7 +69,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <a
-          href="#"
+          href="#whitelist"
           className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-semibold text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
         >
           Sign up

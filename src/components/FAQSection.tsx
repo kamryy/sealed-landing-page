@@ -37,7 +37,10 @@ const faqItems = [
 
 export default function FAQSection() {
   return (
-    <section className="relative mt-46 flex flex-col items-center py-10 lg:mt-56 lg:py-20">
+    <section
+      id="faq"
+      className="relative mt-66 flex flex-col items-center py-10 lg:mt-46 lg:py-20"
+    >
       <div className="w-full max-w-[1600px]">
         <div className="flex max-w-[900px] flex-col items-start gap-6">
           <GradientBadge>
@@ -77,9 +80,12 @@ export default function FAQSection() {
         </div>
 
         <div className="mt-12 flex justify-center lg:mt-14">
-          <button className="rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-semibold text-black transition-opacity hover:opacity-90 md:text-lg">
+          <a
+            href="/faq"
+            className="rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-semibold text-black transition-opacity hover:opacity-90 md:text-lg"
+          >
             View all FAQs
-          </button>
+          </a>
         </div>
       </div>
     </section>

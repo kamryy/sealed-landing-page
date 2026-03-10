@@ -126,10 +126,16 @@ h6 {
   }
 }
 
+@media (min-height: 850px) and (max-width: 1020px) {
+  .section-four-stack {
+    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
+    margin-top: -50px;
+  }
+}
 @media (min-height: 850px) {
   .section-four-stack {
     /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: 100px;
+    margin-top: 0px;
   }
 }
 
