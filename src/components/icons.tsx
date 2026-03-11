@@ -43,16 +43,109 @@ export function SecureIcon({
   );
 }
 
+export function ServerlessIcon({
+  size = 20,
+  className = 'text-white/60',
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className={className}
+    >
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="12" r="3" />
+      <line x1="9" y1="12" x2="15" y2="12" />
+    </svg>
+  );
+}
+
+export function MessagingIcon({
+  size = 20,
+  className = 'text-white/60',
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className={className}
+    >
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <line x1="8" y1="9" x2="16" y2="9" />
+      <line x1="8" y1="13" x2="13" y2="13" />
+    </svg>
+  );
+}
+
+export function QuantumIcon({
+  size = 20,
+  className = 'text-white/60',
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className={className}
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+export function WalletIcon({
+  size = 20,
+  className = 'text-white/60',
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className={className}
+    >
+      <rect x="2" y="6" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+      <circle cx="17" cy="14" r="1.5" />
+    </svg>
+  );
+}
+
+export type SlideIconType = 'privacy' | 'secure' | 'serverless' | 'messaging' | 'quantum' | 'wallet';
+
 export function SlideIcon({
   icon,
   className,
 }: {
-  icon: 'privacy' | 'secure';
+  icon: SlideIconType;
   className?: string;
 }) {
-  return icon === 'privacy' ? (
-    <PrivacyIcon className={className} />
-  ) : (
-    <SecureIcon className={className} />
-  );
+  switch (icon) {
+    case 'privacy':
+      return <PrivacyIcon className={className} />;
+    case 'secure':
+      return <SecureIcon className={className} />;
+    case 'serverless':
+      return <ServerlessIcon className={className} />;
+    case 'messaging':
+      return <MessagingIcon className={className} />;
+    case 'quantum':
+      return <QuantumIcon className={className} />;
+    case 'wallet':
+      return <WalletIcon className={className} />;
+  }
 }

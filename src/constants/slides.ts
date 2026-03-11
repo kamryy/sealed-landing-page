@@ -1,43 +1,50 @@
+import type { SlideIconType } from '@/components/icons';
+
 export interface Slide {
   heading: string;
   subheading: string;
   cardTitle: string;
   cardDescription: string;
-  icon: 'privacy' | 'secure';
+  icon: SlideIconType;
 }
 
-/**
- * Unique slide definitions. The carousel cycles through these.
- * Previously duplicated 5× — now kept DRY and repeated programmatically.
- */
-const UNIQUE_SLIDES: Slide[] = [
+export const SLIDES: Slide[] = [
   {
     heading: 'Serverless Communication',
     subheading:
-      'Sealed uses advanced cryptography to ensure fully private communication that never passes through any server.',
-    cardTitle: 'Communication Only You Can Read',
+      'No middleman. No server. Just you and your receiver.',
+    cardTitle: 'Serverless Communication',
     cardDescription:
-      'Sealed is built on strong cryptographic technology that guarantees end-to-end security without relying on centralized servers. Messages are exchanged directly between users, and the system is designed so that even the developers have no technical ability to view or intercept them.',
-    icon: 'privacy',
+      'Sealed sends messages directly between users with no middleman and no server in between. Your conversations stay between you and your receiver — no one else.',
+    icon: 'serverless',
   },
   {
-    heading: 'Another Headline',
+    heading: 'Sealed Messaging',
     subheading:
-      'Infrastructure that works peer-to-peer, preventing anyone — including the creators — from accessing your data.',
-    cardTitle: 'Secure Communication',
+      'End-to-End Encryption standard. Ephemeral layers on demand. Stealth routing on every send.',
+    cardTitle: 'Sealed Messaging',
     cardDescription:
-      'Sealed relies on advanced encryption methods to ensure full end-to-end protection without the use of central infrastructure. Communication happens peer-to-peer, and the architecture prevents anyone — including the creators — from accessing or monitoring the content of messages.',
-    icon: 'secure',
+      'End-to-End Encryption is the standard for all messages. Activate the Ephemeral Layer whenever you need it, and Stealth Message Routing kicks in every time you click send.',
+    icon: 'messaging',
   },
-];
-
-/** Full slide list used by the carousel (repeats the two unique slides). */
-export const SLIDES: Slide[] = [
-  UNIQUE_SLIDES[0],
-  UNIQUE_SLIDES[1],
-  UNIQUE_SLIDES[0],
-  UNIQUE_SLIDES[1],
-  UNIQUE_SLIDES[0],
+  {
+    heading: 'Quantum Resistant Protection',
+    subheading:
+      'Resistant to super computing. Protecting sensitive communication against future threats.',
+    cardTitle: 'Quantum Resistant Protection',
+    cardDescription:
+      'Built to resist super computing power, Sealed protects your sensitive communication against future quantum solutions — keeping your data safe today and tomorrow.',
+    icon: 'quantum',
+  },
+  {
+    heading: 'No Identity',
+    subheading:
+      'No phone number. No email. No name. Use your wallet.',
+    cardTitle: 'No Identity',
+    cardDescription:
+      'No phone number, no email, no name required. Just connect your wallet and start communicating — fully anonymous from the start.',
+    icon: 'wallet',
+  },
 ];
 
 export const STEP_COUNT = SLIDES.length;
