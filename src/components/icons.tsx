@@ -125,7 +125,13 @@ export function WalletIcon({
   );
 }
 
-export type SlideIconType = 'privacy' | 'secure' | 'serverless' | 'messaging' | 'quantum' | 'wallet';
+export type SlideIconType =
+  | 'privacy'
+  | 'secure'
+  | 'serverless'
+  | 'messaging'
+  | 'quantum'
+  | 'wallet';
 
 export function SlideIcon({
   icon,

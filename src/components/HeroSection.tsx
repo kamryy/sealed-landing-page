@@ -8,7 +8,10 @@ import GradientBadge from '@/components/GradientBadge';
 
 export default function HeroSection() {
   return (
-    <section className="overflow-visible  relative grid items-center gap-10 pt-4 sm:pt-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+    <section
+      id="hero"
+      className="overflow-visible  relative grid items-center gap-10 pt-4 sm:pt-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
+    >
       <div className="relative z-10 min-w-0 text-center sm:text-left lg:text-left px-6 lg:px-0">
         <div className="hidden sm:inline-flex">
           <GradientBadge>

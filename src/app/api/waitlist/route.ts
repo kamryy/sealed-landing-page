@@ -5,8 +5,14 @@ export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { email?: string };
+    const body = (await request.json()) as {
+      email?: string;
+      wallet?: string;
+      nickname?: string;
+    };
     const email = body.email?.trim().toLowerCase();
+    const wallet = body.wallet?.trim() || undefined;
+    const nickname = body.nickname?.trim() || undefined;
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json(
@@ -15,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = addWaitlistEmail(email);
+    const result = addWaitlistEmail(email, wallet, nickname);
 
     return NextResponse.json(
       {

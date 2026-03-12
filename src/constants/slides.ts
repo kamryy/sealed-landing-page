@@ -11,8 +11,7 @@ export interface Slide {
 export const SLIDES: Slide[] = [
   {
     heading: 'Serverless Communication',
-    subheading:
-      'No middleman. No server. Just you and your receiver.',
+    subheading: 'No middleman. No server. Just you and your receiver.',
     cardTitle: 'Serverless Communication',
     cardDescription:
       'Sealed sends messages directly between users with no middleman and no server in between. Your conversations stay between you and your receiver — no one else.',
@@ -38,8 +37,7 @@ export const SLIDES: Slide[] = [
   },
   {
     heading: 'No Identity',
-    subheading:
-      'No phone number. No email. No name. Use your wallet.',
+    subheading: 'No phone number. No email. No name. Use your wallet.',
     cardTitle: 'No Identity',
     cardDescription:
       'No phone number, no email, no name required. Just connect your wallet and start communicating — fully anonymous from the start.',

@@ -38,22 +38,45 @@ function getDb() {
       CREATE TABLE IF NOT EXISTS waitlist_subscribers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT NOT NULL UNIQUE,
+        wallet TEXT,
+        nickname TEXT,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Add columns if table already exists from an older schema
+    const cols = global.waitlistDb
+      .prepare('PRAGMA table_info(waitlist_subscribers)')
+      .all() as { name: string }[];
+    const colNames = new Set(cols.map((c) => c.name));
+    if (!colNames.has('wallet')) {
+      global.waitlistDb.exec(
+        'ALTER TABLE waitlist_subscribers ADD COLUMN wallet TEXT'
+      );
+    }
+    if (!colNames.has('nickname')) {
+      global.waitlistDb.exec(
+        'ALTER TABLE waitlist_subscribers ADD COLUMN nickname TEXT'
+      );
+    }
+
     global.waitlistDb.__initialized = true;
   }
 
   return global.waitlistDb;
 }
 
-export function addWaitlistEmail(email: string) {
+export function addWaitlistEmail(
+  email: string,
+  wallet?: string,
+  nickname?: string
+) {
   const db = getDb();
 
   try {
-    db.prepare('INSERT INTO waitlist_subscribers (email) VALUES (?)').run(
-      email
-    );
+    db.prepare(
+      'INSERT INTO waitlist_subscribers (email, wallet, nickname) VALUES (?, ?, ?)'
+    ).run(email, wallet || null, nickname || null);
     return { created: true };
   } catch (error) {
     if (
