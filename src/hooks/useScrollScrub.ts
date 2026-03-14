@@ -23,6 +23,7 @@ export function useScrollScrub(
   const progressRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const snappedStepRef = useRef<number | null>(null);
+  const lastScrollYRef = useRef(0);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [animatedRotation, setAnimatedRotation] = useState(ROTATIONS[0]);
@@ -107,16 +108,40 @@ export function useScrollScrub(
     };
 
     const onScroll = () => {
+      const scrollY = window.scrollY;
+      const scrollingUp = scrollY < lastScrollYRef.current;
+      lastScrollYRef.current = scrollY;
+
       const state = getSectionLockState();
-      if (state.beforeLockStart) {
-        if (progressRef.current !== 0) applyProgress(0);
-        setIsScrollLocked(false);
-        return;
-      }
+
       if (state.afterLockEnd) {
         if (progressRef.current !== 1) applyProgress(1);
         setIsScrollLocked(false);
+        return;
       }
+
+      if (state.canScrub) {
+        // Re-entering from below while scrolling up: lock to allow reverse scrubbing
+        if (scrollingUp && progressRef.current >= 1) {
+          setIsScrollLocked(true);
+          return;
+        }
+        // Already mid-scrub: keep locked
+        if (progressRef.current > 0 && progressRef.current < 1) {
+          setIsScrollLocked(true);
+          return;
+        }
+        return;
+      }
+
+      // Card not fully visible, not past section end.
+      // If scrolling up with progress near end, don't reset — wait for sticky to re-engage.
+      if (scrollingUp && progressRef.current > 0.5) {
+        return;
+      }
+
+      if (progressRef.current !== 0) applyProgress(0);
+      setIsScrollLocked(false);
     };
 
     const isOverDarkOverlay = (clientY: number) => {
@@ -181,6 +206,7 @@ export function useScrollScrub(
     };
 
     /* ──── attach ───────────────────────────────────────────────── */
+    lastScrollYRef.current = window.scrollY;
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);

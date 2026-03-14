@@ -88,8 +88,8 @@ export default function SectionThree() {
 
     const rect = scrubArea.getBoundingClientRect();
     const viewport = window.innerHeight;
-    // Start scrubbing when the scrub area top reaches 70% down the viewport (earlier trigger)
-    const lockStartY = viewport * 0.55;
+    // Start scrubbing when the section is vertically centered (top within top 35% of viewport)
+    const lockStartY = viewport * 0.35;
     // End scrubbing when the scrub area bottom is near the bottom of viewport
     const lockEndY = viewport * 0.95;
 
