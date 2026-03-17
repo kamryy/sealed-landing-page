@@ -162,7 +162,12 @@ export function useScrollScrub(
       }
 
       const state = getSectionLockState();
-      console.log('[scrub] onWheel', { canScrub: state.canScrub, progress: progressRef.current, deltaY: e.deltaY, deltaMode: e.deltaMode });
+      console.log('[scrub] onWheel', {
+        canScrub: state.canScrub,
+        progress: progressRef.current,
+        deltaY: e.deltaY,
+        deltaMode: e.deltaMode,
+      });
       if (!state.canScrub) {
         setIsScrollLocked(false);
         return;
