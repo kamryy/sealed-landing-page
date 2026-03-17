@@ -40,13 +40,7 @@ function SectionHeading({
   );
 }
 
-function DataTable({
-  headers,
-  rows,
-}: {
-  headers: string[];
-  rows: string[][];
-}) {
+function DataTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
     <div className="my-6 overflow-x-auto rounded-xl border border-white/6">
       <table className="w-full min-w-120 text-sm">
@@ -64,10 +58,7 @@ function DataTable({
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr
-              key={i}
-              className="border-b border-white/4 last:border-none"
-            >
+            <tr key={i} className="border-b border-white/4 last:border-none">
               {row.map((cell, j) => (
                 <td
                   key={j}
@@ -130,8 +121,8 @@ export default function PrivacyPolicyPage() {
             Privacy Policy
           </h1>
           <p className="mt-3 text-[#888]">
-            Effective Date: March 14, 2026 &middot; App&nbsp;Version 1.0.9+ &middot;
-            iOS&nbsp;&middot;&nbsp;Android
+            Effective Date: March 14, 2026 &middot; App&nbsp;Version 1.0.9+
+            &middot; iOS&nbsp;&middot;&nbsp;Android
           </p>
         </div>
 
@@ -226,7 +217,9 @@ export default function PrivacyPolicyPage() {
             ]}
           />
           <div className="rounded-xl border border-sealed-teal/10 bg-sealed-teal/3 px-5 py-4 text-sm text-[#b3b3b3]">
-            <strong className="text-white">We have zero access to this data.</strong>{' '}
+            <strong className="text-white">
+              We have zero access to this data.
+            </strong>{' '}
             If you lose your device and your seed phrase backup, there is no
             recovery mechanism — no one can restore access on your behalf. You
             are the sole custodian.
@@ -246,8 +239,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="list-disc space-y-1 pl-6">
             <li>
-              <strong className="text-white">Public</strong> — visible to
-              anyone with access to the ledger
+              <strong className="text-white">Public</strong> — visible to anyone
+              with access to the ledger
             </li>
             <li>
               <strong className="text-white">Permanent</strong> — blockchain
@@ -303,8 +296,8 @@ export default function PrivacyPolicyPage() {
             </span>
           </h3>
           <p>
-            To provide real-time notifications and efficient message delivery, we
-            operate an indexer service. This server stores the following data
+            To provide real-time notifications and efficient message delivery,
+            we operate an indexer service. This server stores the following data
             about you:
           </p>
           <DataTable
@@ -320,11 +313,7 @@ export default function PrivacyPolicyPage() {
                 'Allows the indexer to detect incoming messages addressed to you — <strong class="text-white">without reading message content</strong>',
                 'Until account deletion or 90 days of inactivity',
               ],
-              [
-                'SHA-256 hash of view key',
-                'Lookup index',
-                'Same as above',
-              ],
+              ['SHA-256 hash of view key', 'Lookup index', 'Same as above'],
               [
                 'Firebase Cloud Messaging (FCM) token',
                 'Push notification delivery',
@@ -381,8 +370,8 @@ export default function PrivacyPolicyPage() {
             </strong>
             . There is no email address, phone number, or password associated
             with your account. When authenticating to our indexer API, your app
-            signs a time-limited challenge string with your Ed25519 wallet private
-            key — the signing key never leaves your device.
+            signs a time-limited challenge string with your Ed25519 wallet
+            private key — the signing key never leaves your device.
           </p>
 
           {/* ── 5 ── */}
@@ -453,8 +442,8 @@ export default function PrivacyPolicyPage() {
           </h4>
           <ul className="list-disc space-y-1 pl-6">
             <li>
-              <strong className="text-white">AlgoNode</strong>{' '}
-              (<code className="text-xs text-sealed-teal/80">
+              <strong className="text-white">AlgoNode</strong> (
+              <code className="text-xs text-sealed-teal/80">
                 testnet-api.algonode.cloud
               </code>
               ) — public Algorand node operated by a third party. Transactions
@@ -472,9 +461,7 @@ export default function PrivacyPolicyPage() {
           <SectionHeading id="data-use" number="07">
             How We Use Your Data
           </SectionHeading>
-          <p>
-            Data we hold on our indexer server is used exclusively for:
-          </p>
+          <p>Data we hold on our indexer server is used exclusively for:</p>
           <ol className="list-decimal space-y-1 pl-6">
             <li>
               <strong className="text-white">
@@ -518,10 +505,7 @@ export default function PrivacyPolicyPage() {
                 'User account (view key, FCM token)',
                 'Deleted after <strong class="text-white">90 days of inactivity</strong>',
               ],
-              [
-                'Server IP logs',
-                'Rotated per operational practice',
-              ],
+              ['Server IP logs', 'Rotated per operational practice'],
               [
                 'Blockchain data',
                 '<strong class="text-white">Permanent</strong> — cannot be deleted',
@@ -559,8 +543,9 @@ export default function PrivacyPolicyPage() {
             </li>
             <li>HTTPS/TLS is enforced for all API communication</li>
             <li>
-              Our server uses <code className="text-xs text-sealed-teal/80">helmet</code> security
-              headers and rate limiting (100 requests/minute per IP)
+              Our server uses{' '}
+              <code className="text-xs text-sealed-teal/80">helmet</code>{' '}
+              security headers and rate limiting (100 requests/minute per IP)
             </li>
             <li>
               Private keys are stored in platform secure enclaves (iOS Keychain,
@@ -583,17 +568,15 @@ export default function PrivacyPolicyPage() {
           <p>
             Sealed is not directed at children under the age of 13 (or 16 where
             applicable under local law). We do not knowingly collect data from
-            children. If you believe a child has used the service, please contact
-            us and we will delete indexer-side data promptly.
+            children. If you believe a child has used the service, please
+            contact us and we will delete indexer-side data promptly.
           </p>
 
           {/* ── 11 ── */}
           <SectionHeading id="your-rights" number="11">
             Your Rights
           </SectionHeading>
-          <p>
-            Depending on your jurisdiction, you may have the right to:
-          </p>
+          <p>Depending on your jurisdiction, you may have the right to:</p>
           <ul className="list-disc space-y-1 pl-6">
             <li>
               <strong className="text-white">Access</strong> the personal data
@@ -604,9 +587,9 @@ export default function PrivacyPolicyPage() {
               inaccurate data (where technically possible)
             </li>
             <li>
-              <strong className="text-white">Erasure</strong>{' '}
-              (&ldquo;right to be forgotten&rdquo;) of data held on our servers
-              — note this cannot extend to blockchain data
+              <strong className="text-white">Erasure</strong> (&ldquo;right to
+              be forgotten&rdquo;) of data held on our servers — note this
+              cannot extend to blockchain data
             </li>
             <li>
               <strong className="text-white">Portability</strong> of your
@@ -637,10 +620,10 @@ export default function PrivacyPolicyPage() {
             International Data Transfers
           </SectionHeading>
           <p>
-            If you access Sealed from outside the region where our indexer server
-            is hosted, your indexer-held data may be transferred internationally.
-            We implement appropriate safeguards in accordance with applicable
-            law.
+            If you access Sealed from outside the region where our indexer
+            server is hosted, your indexer-held data may be transferred
+            internationally. We implement appropriate safeguards in accordance
+            with applicable law.
           </p>
           <p>
             Public blockchain data (Realm B) is replicated globally across all

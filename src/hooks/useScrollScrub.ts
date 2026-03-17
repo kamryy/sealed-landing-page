@@ -156,17 +156,27 @@ export function useScrollScrub(
 
     const onWheel = (e: WheelEvent) => {
       if (isOverDarkOverlay(e.clientY)) {
+        console.log('[scrub] blocked: over dark overlay', e.clientY);
         setIsScrollLocked(false);
         return;
       }
 
       const state = getSectionLockState();
+      console.log('[scrub] onWheel', { canScrub: state.canScrub, progress: progressRef.current, deltaY: e.deltaY, deltaMode: e.deltaMode });
       if (!state.canScrub) {
         setIsScrollLocked(false);
         return;
       }
 
-      const delta = e.deltaY * 0.0014;
+      // Normalize deltaY across deltaMode units so physical mice (line/page
+      // mode) behave the same as trackpads (pixel mode).
+      const pixelY =
+        e.deltaMode === 2
+          ? e.deltaY * window.innerHeight // page → px
+          : e.deltaMode === 1
+            ? e.deltaY * 32 // line → px (browsers use ~32 px/line)
+            : e.deltaY; // already px
+      const delta = pixelY * 0.0014;
       const next = Math.max(0, Math.min(1, progressRef.current + delta));
 
       if (next !== progressRef.current) {
