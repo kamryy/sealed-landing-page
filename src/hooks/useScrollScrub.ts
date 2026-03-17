@@ -27,6 +27,8 @@ export function useScrollScrub(
   const snappedStepRef = useRef<number | null>(null);
   const lastScrollYRef = useRef(0);
   const hasCompletedReverseRef = useRef(false);
+  const isAutoScrollingRef = useRef(false);
+  const hasSnappedRef = useRef(false);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [animatedRotation, setAnimatedRotation] = useState(ROTATIONS[0]);
@@ -57,7 +59,11 @@ export function useScrollScrub(
       const sectionEl = sectionRef.current;
       const cardEl = featureCardRef.current;
       if (!sectionEl || !cardEl)
-        return { canScrub: false, beforeLockStart: true, afterLockEnd: false };
+        return {
+          canScrub: false,
+          beforeLockStart: true,
+          afterLockEnd: false,
+        };
 
       const sectionRect = sectionEl.getBoundingClientRect();
       const cardRect = cardEl.getBoundingClientRect();
@@ -116,13 +122,92 @@ export function useScrollScrub(
       if (clamped > 0) {
         hasCompletedReverseRef.current = false;
       }
-      setIsScrollLocked(clamped > 0 && clamped < 1);
+      // Keep scroll locked during active scrub, and also at progress=1
+      // when reverse-scrub hasn't completed (arriving from below).
+      const shouldLock =
+        (clamped > 0 && clamped < 1) ||
+        (clamped === 1 && !hasCompletedReverseRef.current);
+      setIsScrollLocked(shouldLock);
+    };
+
+    const doAutoSnap = (scrollingDown: boolean) => {
+      if (isAutoScrollingRef.current || hasSnappedRef.current) return;
+
+      const sectionEl = sectionRef.current;
+      const cardEl = featureCardRef.current;
+      if (!sectionEl || !cardEl) return;
+
+      const sectionRect = sectionEl.getBoundingClientRect();
+      const targetScrollY = window.scrollY + sectionRect.top + 300;
+
+      hasSnappedRef.current = true;
+      isAutoScrollingRef.current = true;
+
+      // Coming from below: set progress to 1 for reverse scrub
+      if (!scrollingDown && progressRef.current < 1) {
+        applyProgress(1);
+      }
+
+      window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+
+      let frames = 0;
+      const checkDone = () => {
+        frames++;
+        if (Math.abs(window.scrollY - targetScrollY) < 2 || frames > 120) {
+          isAutoScrollingRef.current = false;
+          lastScrollYRef.current = window.scrollY;
+          // After auto-snap from below, lock scroll so wheel events
+          // drive the reverse scrub instead of scrolling the page.
+          if (!scrollingDown && progressRef.current >= 1) {
+            setIsScrollLocked(true);
+          }
+          return;
+        }
+        requestAnimationFrame(checkDone);
+      };
+      requestAnimationFrame(checkDone);
     };
 
     const onScroll = () => {
       const scrollY = window.scrollY;
       const scrollingUp = scrollY < lastScrollYRef.current;
+      const scrollingDown = scrollY > lastScrollYRef.current;
       lastScrollYRef.current = scrollY;
+
+      // Don't interfere while auto-scrolling
+      if (isAutoScrollingRef.current) return;
+
+      const sectionEl = sectionRef.current;
+      if (sectionEl) {
+        const sectionRect = sectionEl.getBoundingClientRect();
+        const vh = window.innerHeight;
+
+        // Reset snap flag when section is fully out of view
+        if (sectionRect.bottom < -200 || sectionRect.top > vh + 200) {
+          hasSnappedRef.current = false;
+        }
+
+        // Auto-snap zone: section is partially in view but card not yet positioned
+        if (!hasSnappedRef.current && !hasCompletedReverseRef.current) {
+          if (scrollingDown && progressRef.current === 0) {
+            // Coming from top: snap when section top enters upper 70% of viewport
+            if (sectionRect.top < vh * 0.7 && sectionRect.top > -100) {
+              doAutoSnap(true);
+              return;
+            }
+          }
+          if (scrollingUp) {
+            // Coming from bottom: snap when section bottom enters lower 70% of viewport
+            if (
+              sectionRect.bottom > vh * 0.3 &&
+              sectionRect.bottom < vh + 100
+            ) {
+              doAutoSnap(false);
+              return;
+            }
+          }
+        }
+      }
 
       const state = getSectionLockState();
 
@@ -154,8 +239,11 @@ export function useScrollScrub(
       }
 
       // Card not fully visible, not past section end.
-      // If scrolling up with progress near end, don't reset — wait for sticky to re-engage.
-      if (scrollingUp && progressRef.current > 0.5) {
+      // If not actively scrolling down and progress is past halfway,
+      // don't reset — wait for the sticky card to re-engage.
+      // (Using !scrollingDown instead of scrollingUp so that ambiguous
+      // scroll events after smooth-scroll auto-snap don't reset progress.)
+      if (!scrollingDown && progressRef.current > 0.5) {
         return;
       }
 
