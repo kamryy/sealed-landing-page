@@ -88,8 +88,8 @@ export default function SectionThree() {
 
     const rect = scrubArea.getBoundingClientRect();
     const viewport = window.innerHeight;
-    // Start scrubbing when the section is vertically centered (top within top 35% of viewport)
-    const lockStartY = viewport * 0.35;
+    // Start scrubbing when the section top is within upper 55% of viewport
+    const lockStartY = viewport * 0.5;
     // End scrubbing when the scrub area bottom is near the bottom of viewport
     const lockEndY = viewport * 0.95;
 
@@ -210,7 +210,14 @@ export default function SectionThree() {
         hasCompletedRef.current = false;
       }
 
-      const delta = e.deltaY * 0.0014;
+      // Normalize deltaY across deltaMode units
+      const pixelY =
+        e.deltaMode === 2
+          ? e.deltaY * window.innerHeight
+          : e.deltaMode === 1
+            ? e.deltaY * 32
+            : e.deltaY;
+      const delta = pixelY * 0.0008;
       const next = Math.max(0, Math.min(1, progressRef.current + delta));
 
       if (next !== progressRef.current) {

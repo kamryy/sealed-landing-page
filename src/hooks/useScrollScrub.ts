@@ -21,9 +21,12 @@ export function useScrollScrub(
   isMobile: boolean
 ): ScrollScrubState {
   const progressRef = useRef(0);
+  const targetProgressRef = useRef(0);
+  const rafIdRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const snappedStepRef = useRef<number | null>(null);
   const lastScrollYRef = useRef(0);
+  const hasCompletedReverseRef = useRef(false);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [animatedRotation, setAnimatedRotation] = useState(ROTATIONS[0]);
@@ -43,7 +46,7 @@ export function useScrollScrub(
     }
 
     const totalTransitions = STEP_COUNT - 1;
-    const CARD_VISIBILITY_TOLERANCE_PX = 4;
+    const CARD_VISIBILITY_TOLERANCE_PX = 20;
     const SCRUB_START_BOTTOM_OFFSET_PX = 0;
     const DWELL_WINDOW = 0.1; // how close to a step the progress must be to "snap" to it
     const DWELL_RELEASE_WINDOW = 0.1; // how far from the snapped step the progress must be to release it
@@ -75,6 +78,7 @@ export function useScrollScrub(
     const applyProgress = (next: number) => {
       const clamped = Math.max(0, Math.min(1, next));
       progressRef.current = clamped;
+      targetProgressRef.current = clamped;
 
       const continuousRaw = clamped * totalTransitions;
       const nearestStep = Math.round(continuousRaw);
@@ -104,6 +108,14 @@ export function useScrollScrub(
       setCurrentStep(idx);
       setAnimatedRotation(continuous * STEP_ANGLE);
       setAnimationProgress(stepProg);
+      // Mark reverse-scrub complete when progress reaches 0 from above
+      if (clamped === 0 && !hasCompletedReverseRef.current) {
+        hasCompletedReverseRef.current = true;
+      }
+      // Clear the flag once we start scrubbing forward again
+      if (clamped > 0) {
+        hasCompletedReverseRef.current = false;
+      }
       setIsScrollLocked(clamped > 0 && clamped < 1);
     };
 
@@ -115,14 +127,20 @@ export function useScrollScrub(
       const state = getSectionLockState();
 
       if (state.afterLockEnd) {
-        if (progressRef.current !== 1) applyProgress(1);
+        if (!hasCompletedReverseRef.current) {
+          if (progressRef.current !== 1) applyProgress(1);
+        }
         setIsScrollLocked(false);
         return;
       }
 
       if (state.canScrub) {
         // Re-entering from below while scrolling up: lock to allow reverse scrubbing
-        if (scrollingUp && progressRef.current >= 1) {
+        if (
+          scrollingUp &&
+          progressRef.current >= 1 &&
+          !hasCompletedReverseRef.current
+        ) {
           setIsScrollLocked(true);
           return;
         }
@@ -131,6 +149,7 @@ export function useScrollScrub(
           setIsScrollLocked(true);
           return;
         }
+        // Progress is 0 and scrolling up — don't lock, let page scroll normally
         return;
       }
 
@@ -141,6 +160,8 @@ export function useScrollScrub(
       }
 
       if (progressRef.current !== 0) applyProgress(0);
+      // User has scrolled away from the section — clear the reverse flag
+      hasCompletedReverseRef.current = false;
       setIsScrollLocked(false);
     };
 
@@ -173,6 +194,12 @@ export function useScrollScrub(
         return;
       }
 
+      // At the start scrolling up — let the page scroll normally
+      if (progressRef.current <= 0 && e.deltaY < 0) {
+        setIsScrollLocked(false);
+        return;
+      }
+
       // Normalize deltaY across deltaMode units so physical mice (line/page
       // mode) behave the same as trackpads (pixel mode).
       const pixelY =
@@ -181,18 +208,50 @@ export function useScrollScrub(
           : e.deltaMode === 1
             ? e.deltaY * 32 // line → px (browsers use ~32 px/line)
             : e.deltaY; // already px
-      const delta = pixelY * 0.0014;
-      const next = Math.max(0, Math.min(1, progressRef.current + delta));
+      const rawDelta = pixelY * 0.0007;
+      const nextTarget = Math.max(
+        0,
+        Math.min(1, targetProgressRef.current + rawDelta)
+      );
 
-      if (next !== progressRef.current) {
-        e.preventDefault();
-        applyProgress(next);
+      const leavingStart = nextTarget <= 0 && e.deltaY < 0;
+      const leavingEnd = nextTarget >= 1 && e.deltaY > 0;
+
+      if (leavingStart || leavingEnd) {
+        targetProgressRef.current = Math.max(0, Math.min(1, nextTarget));
+        setIsScrollLocked(false);
         return;
       }
 
-      const leavingStart = progressRef.current <= 0 && e.deltaY < 0;
-      const leavingEnd = progressRef.current >= 1 && e.deltaY > 0;
-      setIsScrollLocked(!(leavingStart || leavingEnd));
+      e.preventDefault();
+      targetProgressRef.current = nextTarget;
+      setIsScrollLocked(true);
+
+      // Start the animation loop if not already running
+      if (!rafIdRef.current) {
+        const animate = () => {
+          const current = progressRef.current;
+          const target = targetProgressRef.current;
+          const diff = target - current;
+
+          // Lerp speed: move 8% of the remaining distance each frame
+          // Min step prevents getting stuck at tiny fractional differences
+          const LERP_SPEED = 0.14;
+          const MIN_STEP = 0.004;
+
+          if (Math.abs(diff) < MIN_STEP) {
+            applyProgress(target);
+            rafIdRef.current = 0;
+            return;
+          }
+
+          const step =
+            Math.sign(diff) * Math.max(Math.abs(diff) * LERP_SPEED, MIN_STEP);
+          applyProgress(current + step);
+          rafIdRef.current = requestAnimationFrame(animate);
+        };
+        rafIdRef.current = requestAnimationFrame(animate);
+      }
     };
 
     const onTouchStart = (e: TouchEvent) => {
@@ -235,6 +294,8 @@ export function useScrollScrub(
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('touchmove', onTouchMove);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = 0;
       setIsScrollLocked(false);
     };
   }, [isMobile, sectionRef, arcContainerRef, featureCardRef]);
