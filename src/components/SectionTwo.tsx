@@ -60,7 +60,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className="flex flex-col items-center justify-center gap-2.5 rounded-[15px] p-5 text-center shadow-[0_1.25px_2.5px_rgba(0,0,0,0.05)]"
+      className="group flex flex-col items-center justify-center gap-2.5 rounded-[15px] p-5 text-center shadow-[0_1.25px_2.5px_rgba(0,0,0,0.05)] transition-colors duration-200 hover:bg-[rgba(28,28,28,0.4)]"
       style={{
         backgroundImage:
           'linear-gradient(203deg, rgba(26,26,26,0) 0%, rgba(26,26,26,0.2) 40%), linear-gradient(90deg, rgba(28,28,28,0.2) 0%, rgba(28,28,28,0.2) 100%)',
@@ -72,7 +72,7 @@ function FeatureCard({
         {title}
       </h3>
 
-      <p className="text-base leading-6.25 text-[#b3b3b3]">{description}</p>
+      <p className="text-base leading-6.25 text-[#b3b3b3] transition-colors duration-200 group-hover:text-white">{description}</p>
     </div>
   );
 }
