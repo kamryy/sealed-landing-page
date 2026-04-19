@@ -39,7 +39,7 @@ export default function FAQSection() {
   return (
     <section
       id="faq"
-      className="relative mt-66 flex flex-col items-center py-10 lg:mt-46 lg:py-20"
+      className="relative flex flex-col items-center py-10 lg:py-20"
     >
       <div className="w-full max-w-[1600px]">
         <div className="flex max-w-[900px] flex-col items-start gap-6">

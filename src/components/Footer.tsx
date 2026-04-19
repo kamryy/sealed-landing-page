@@ -7,26 +7,78 @@ const FOOTER_LINKS = [
   { label: 'Security', href: '/security' },
 ];
 
-function XIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"
-        fill="#0a0a0a"
-      />
-    </svg>
-  );
-}
+const SOCIALS: Array<{
+  label: string;
+  href: string;
+  icon: (props: { className?: string }) => React.JSX.Element;
+}> = [
+  {
+    label: 'X (Twitter)',
+    href: 'https://x.com/sealedchannel',
+    icon: ({ className }) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+        aria-hidden="true"
+      >
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/sealed.channel',
+    icon: ({ className }) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/sealedchannel/',
+    icon: ({ className }) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+        aria-hidden="true"
+      >
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.554V9H7.12v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Discord',
+    href: 'https://discord.gg/bYMqbEWby',
+    icon: ({ className }) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+        aria-hidden="true"
+      >
+        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+      </svg>
+    ),
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col items-center gap-10 py-0 mt-60">
+    <footer className="flex flex-col items-center gap-10 py-0">
       <a href="#" className="flex items-center gap-2.25">
         <Image
           src="/assets/sealed-logo.svg"
@@ -58,37 +110,18 @@ export default function Footer() {
       <div className="relative flex w-full flex-col items-center gap-6 rounded-full border border-[#262626] bg-[#1a1a1a] px-4 py-4 sm:flex-row sm:justify-between sm:pr-7.5">
         {/* Social icons */}
         <div className="flex items-center gap-3">
-          <a
-            href="#"
-            aria-label="Facebook"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-sealed-teal transition-opacity hover:opacity-80"
-          >
-            <Image
-              src="/assets/footer/social-icons/Sealed - LP/facebook.svg"
-              alt=""
-              width={15}
-              height={15}
-            />
-          </a>
-          <a
-            href="#"
-            aria-label="X (Twitter)"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-sealed-teal transition-opacity hover:opacity-80"
-          >
-            <XIcon />
-          </a>
-          <a
-            href="#"
-            aria-label="LinkedIn"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-sealed-teal transition-opacity hover:opacity-80"
-          >
-            <Image
-              src="/assets/footer/social-icons/Sealed - LP/in.svg"
-              alt=""
-              width={15}
-              height={15}
-            />
-          </a>
+          {SOCIALS.map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              aria-label={label}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-sealed-teal text-[#0a0a0a] transition-transform duration-200 hover:scale-110 hover:bg-white"
+            >
+              <Icon className="h-[15px] w-[15px]" />
+            </a>
+          ))}
         </div>
 
         {/* Copyright */}

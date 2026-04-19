@@ -1,35 +1,57 @@
 /**
- * Ambient glow blobs that sit behind the entire page.
+ * Ambient glow blobs scattered down the page.
+ *
+ * Absolutely positioned against the `<main>` element so they scroll with
+ * content instead of being pinned to the viewport. One sits near the
+ * hero area, and three more are spread across the lower sections to
+ * keep the atmospheric glow going the whole way down.
+ *
+ * Sits behind everything via `-z-10`.
  */
 export default function BackgroundEffects() {
+  const blobs = [
+    {
+      // Hero / Section One area, left side
+      className:
+        'left-[-10rem] top-[6vh] h-[clamp(20rem,45vh,36rem)] w-[clamp(10rem,18vw,16rem)] -rotate-20 bg-sealed-teal/35',
+      delay: '0s',
+      duration: '10s',
+    },
+    {
+      // Around Section Two / Three, right side
+      className:
+        'right-[-10rem] top-[190vh] h-[clamp(18rem,40vh,32rem)] w-[clamp(11rem,20vw,18rem)] rotate-[100deg] bg-sealed-teal/30',
+      delay: '2s',
+      duration: '12s',
+    },
+    {
+      // Around Section Four / Five, left side
+      className:
+        'left-[-10rem] top-[320vh] h-[clamp(18rem,42vh,32rem)] w-[clamp(10rem,18vw,16rem)] -rotate-12 bg-sealed-teal/26',
+      delay: '4s',
+      duration: '11s',
+    },
+    {
+      // Whitelist / footer area, right side
+      className:
+        'right-[-10rem] top-[450vh] h-[clamp(18rem,42vh,30rem)] w-[clamp(11rem,18vw,16rem)] rotate-[110deg] bg-sealed-teal/22',
+      delay: '5s',
+      duration: '14s',
+    },
+  ];
+
   return (
     <>
-      <div
-        className="pointer-events-none absolute -left-34 top-8 h-[clamp(22rem,45vw,40rem)] w-[clamp(8rem,18vw,17.5rem)] -rotate-20 rounded-full bg-sealed-teal/45 blur-[70px]"
-        style={{ animation: 'sealedLightPulse 8s ease-in-out infinite' }}
-      />
-      <div
-        className="pointer-events-none absolute -left-2 top-50 h-[clamp(20rem,42vw,40rem)] w-[clamp(2rem,4vw,2.75rem)] -rotate-45 rounded-full bg-sealed-teal/45 blur-[30px]"
-        style={{ animation: 'sealedLightPulse 10s ease-in-out infinite 2s' }}
-      />
-
-      <div
-        className="pointer-events-none absolute -right-70 top-1380 lg:top-1200 h-[clamp(22rem,45vw,40rem)] w-[clamp(8rem,18vw,17.5rem)] -rotate-100 rounded-full bg-sealed-teal/45 blur-[70px]"
-        style={{ animation: 'sealedLightPulse 8s ease-in-out infinite' }}
-      />
-      <div
-        className="pointer-events-none absolute -right-2 top-1400 lg:top-1230 h-[clamp(20rem,42vw,40rem)] w-[clamp(2rem,4vw,2.75rem)] -rotate-147 rounded-full bg-sealed-teal/45 blur-[30px]"
-        style={{ animation: 'sealedLightPulse 10s ease-in-out infinite 2s' }}
-      />
-
-      <div
-        className="pointer-events-none absolute -left-40 top-1720 lg:top-1560 lg:-left-20 h-[clamp(50rem,35vw,70rem)] w-[clamp(8rem,18vw,12.5rem)] -rotate-10 rounded-full bg-sealed-teal/45 blur-[70px]"
-        style={{ animation: 'sealedLightPulse 8s ease-in-out infinite' }}
-      />
-      <div
-        className="pointer-events-none absolute -left-2 top-1740 lg:top-1600 h-[clamp(20rem,42vw,40rem)] w-[clamp(2rem,4vw,2.75rem)] -rotate-17 rounded-full bg-sealed-teal/45 blur-[30px]"
-        style={{ animation: 'sealedLightPulse 10s ease-in-out infinite 2s' }}
-      />
+      {blobs.map((blob, i) => (
+        <div
+          key={i}
+          aria-hidden
+          className={`pointer-events-none absolute -z-10 rounded-full blur-[60px] will-change-[opacity] ${blob.className}`}
+          style={{
+            animation: `sealedLightPulse ${blob.duration} ease-in-out infinite ${blob.delay}`,
+          }}
+        />
+      ))}
     </>
   );
 }

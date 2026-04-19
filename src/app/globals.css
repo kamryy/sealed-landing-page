@@ -3,6 +3,29 @@
 :root {
   --background: rgba(6, 9, 8, 1);
   --foreground: #ffffff;
+  /* Approx navbar height incl. safe-area + padding. Mobile: sticky nav at top-0, lg+: sits at top-4 with larger padding. */
+  --nav-h: 72px;
+
+  /* ───────────────────────────────────────────────────────────────
+   * Unified section spacing.
+   *
+   * Change `--section-gap` here and every gap between sections
+   * scales together. The three tiers below are derived from it so
+   * the rhythm stays proportional.
+   *
+   *   --section-gap      (L) big section → section  (default 100%)
+   *   --section-gap-md   (M) related section spacing  (60% of L)
+   *   --section-gap-sm   (S) tight spacing             (35% of L)
+   * ─────────────────────────────────────────────────────────────── */
+  --section-gap: clamp(9rem, 14vh, 14rem);
+  --section-gap-md: calc(var(--section-gap) * 0.6);
+  --section-gap-sm: calc(var(--section-gap) * 0.35);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --nav-h: 96px;
+  }
 }
 
 @theme inline {
@@ -74,83 +97,21 @@ h6 {
   }
 }
 
+/* Unified section spacing — one rule each, driven by --section-gap. */
 .section-two-stack {
-  margin-top: 550px;
-}
-
-@media (min-height: 700px) {
-  .section-two-stack {
-    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: 100px;
-  }
-}
-
-@media (min-height: 800px) {
-  .section-two-stack {
-    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: 00px;
-  }
-}
-
-@media (min-height: 1000px) {
-  .section-two-stack {
-    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: -300px;
-  }
-}
-/* Above 900px — negative margin that scales with height,
-   maxing out at -23.75rem (-380px ≈ -mt-95) on tall screens */
-@media (min-height: 1200px) {
-  .section-two-stack {
-    /* At 901px → ~-360px, at 1100px+ → capped at -380px */
-    margin-top: -400px;
-  }
+  margin-top: var(--section-gap);
 }
 
 .section-four-stack {
-  /* Default: add spacing on smaller screens to prevent overlap with Section Three's scrub/CTA */
-  margin-top: 400px;
+  margin-top: var(--section-gap);
 }
 
-@media (min-height: 600px) {
-  .section-four-stack {
-    /* Reduce spacing on medium screens where the scrub/CTA is less likely to overlap */
-    margin-top: 300px;
-  }
+.section-gap-md {
+  margin-top: var(--section-gap-md);
 }
 
-@media (min-height: 720px) {
-  .section-four-stack {
-    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: 200px;
-  }
-}
-
-@media (min-height: 850px) and (max-width: 1020px) {
-  .section-four-stack {
-    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: -50px;
-  }
-}
-@media (min-height: 850px) {
-  .section-four-stack {
-    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: 0px;
-  }
-}
-
-@media (min-height: 1000px) {
-  .section-four-stack {
-    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: -100px;
-  }
-}
-
-@media (min-height: 1200px) {
-  .section-four-stack {
-    /* Remove spacing on larger screens where the scrub/CTA is less likely to overlap */
-    margin-top: -200px;
-  }
+.section-gap-sm {
+  margin-top: var(--section-gap-sm);
 }
 
 /* Animated rainbow glow for CTA section */
