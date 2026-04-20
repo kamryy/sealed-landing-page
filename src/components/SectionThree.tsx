@@ -190,17 +190,34 @@ function DesktopScrubScene({ header }: { header: React.ReactNode }) {
 function MobileTabs() {
   const [mobileIndex, setMobileIndex] = useState(0);
   const mobileTabsRef = useRef<HTMLDivElement | null>(null);
+  const didMountRef = useRef(false);
 
   useEffect(() => {
+    // Skip the initial mount — otherwise `scrollIntoView` jumps the whole page
+    // down to the tabs section on load, which looks like the user spawned
+    // mid-page on mobile. Only centre the active tab after a user interaction.
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
     const tabsContainer = mobileTabsRef.current;
     if (!tabsContainer) return;
     const activeButton = tabsContainer.querySelector<HTMLButtonElement>(
       `[data-tab-index="${mobileIndex}"]`
     );
-    activeButton?.scrollIntoView({
+    if (!activeButton) return;
+
+    // Scroll only the horizontal tab strip, not the page. Computed manually
+    // to avoid `scrollIntoView` triggering vertical page scroll.
+    const containerRect = tabsContainer.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    const offset =
+      buttonRect.left -
+      containerRect.left -
+      (containerRect.width - buttonRect.width) / 2;
+    tabsContainer.scrollTo({
+      left: tabsContainer.scrollLeft + offset,
       behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest',
     });
   }, [mobileIndex]);
 
