@@ -332,20 +332,22 @@ function DesktopScrubScene() {
           </div>
 
           {/* Dashed vertical line */}
-          <div className="absolute -top-10 left-1/2 h-22 w-px -translate-x-1/2 md:-top-14 md:h-30 lg:-top-16 lg:h-32">
+          <div className="absolute -top-20 left-1/2 h-22 w-px -translate-x-1/2 ">
             <span className="absolute left-1/2 top-10 z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sealed-teal shadow-[0_0_10px_rgba(107,250,214,0.9)]" />
             <svg
               width="25"
               height="100%"
-              viewBox="0 0 2 190"
+              viewBox="0 20 2 50"
+              preserveAspectRatio="none"
               fill="none"
               className="h-full w-full"
             >
+              {/* Line starts at the dot center (~45% down) and stops before the arc (~95%) */}
               <line
                 x1="1"
-                y1="-20"
+                y1="45"
                 x2="1"
-                y2="190"
+                y2="95"
                 stroke="#6bfad6"
                 strokeWidth="2"
                 strokeDasharray="4 4"

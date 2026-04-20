@@ -75,7 +75,7 @@ export default function WhiteListSection() {
         }}
       />
 
-      <div className="relative mx-auto   w-[80%]">
+      <div className="relative mx-auto   w-[92%] sm:w-[87%] lg:w-[82%]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-10 z-0 rounded-[3rem] bg-[radial-gradient(circle_at_50%_55%,rgba(107,250,214,0.34)_0%,rgba(107,250,214,0.18)_35%,rgba(107,250,214,0.04)_60%,rgba(107,250,214,0)_78%)] blur-2xl animate-[sealedHaloPulse_4.2s_ease-in-out_infinite]"

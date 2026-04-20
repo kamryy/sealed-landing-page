@@ -60,7 +60,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className="flex flex-col items-center justify-center gap-2.5 rounded-[15px] p-5 text-center shadow-[0_1.25px_2.5px_rgba(0,0,0,0.05)]"
+      className="group flex flex-col items-center justify-center gap-2.5 rounded-[15px] p-5 text-center shadow-[0_1.25px_2.5px_rgba(0,0,0,0.05)] ring-1 ring-transparent transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(107,250,214,0.12)] hover:ring-sealed-teal/30"
       style={{
         backgroundImage:
           'linear-gradient(203deg, rgba(26,26,26,0) 0%, rgba(26,26,26,0.2) 40%), linear-gradient(90deg, rgba(28,28,28,0.2) 0%, rgba(28,28,28,0.2) 100%)',
