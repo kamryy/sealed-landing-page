@@ -8,7 +8,6 @@ export default function WhiteListSection() {
   const [email, setEmail] = useState('');
   const [wallet, setWallet] = useState('');
   const [nickname, setNickname] = useState('');
-  const [acceptTerms, setAcceptTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,11 +19,6 @@ export default function WhiteListSection() {
 
     if (!email || !email.includes('@')) {
       setErrorMessage('Please provide a valid email address.');
-      return;
-    }
-
-    if (!acceptTerms) {
-      setErrorMessage('Please accept the terms before submitting.');
       return;
     }
 
@@ -55,7 +49,6 @@ export default function WhiteListSection() {
       setEmail('');
       setWallet('');
       setNickname('');
-      setAcceptTerms(false);
     } catch {
       setErrorMessage('Something went wrong. Please try again.');
     } finally {
@@ -216,59 +209,6 @@ export default function WhiteListSection() {
                       Your email address
                     </label>
                   </div>
-
-                  <label className="flex cursor-pointer items-start gap-3 select-none">
-                    <span
-                      className={`relative mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center overflow-hidden rounded-md border transition-colors ${
-                        acceptTerms
-                          ? 'border-sealed-teal bg-sealed-teal/15'
-                          : 'border-white/25 bg-black/40'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={acceptTerms}
-                        onChange={(event) =>
-                          setAcceptTerms(event.target.checked)
-                        }
-                        className="absolute inset-0 cursor-pointer opacity-0"
-                        disabled={isSubmitting}
-                      />
-                      {acceptTerms ? (
-                        <svg
-                          viewBox="0 0 16 16"
-                          className="h-3 w-3 text-sealed-teal"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : null}
-                    </span>
-                    <span className="font-dm-sans text-sm leading-[1.45] text-white/70">
-                      I agree to receive updates and accept the{' '}
-                      <a
-                        href="/terms-of-service"
-                        className="text-white underline-offset-2 hover:underline"
-                      >
-                        Terms
-                      </a>{' '}
-                      &{' '}
-                      <a
-                        href="/privacy-policy"
-                        className="text-white underline-offset-2 hover:underline"
-                      >
-                        Privacy Policy
-                      </a>
-                      .
-                    </span>
-                  </label>
 
                   <button
                     type="submit"
