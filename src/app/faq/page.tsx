@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-import BackgroundEffects from '@/components/BackgroundEffects';
-import Footer from '@/components/Footer';
-import GradientBadge from '@/components/GradientBadge';
-import Navbar from '@/components/Navbar';
-import WhiteListSection from '@/components/WhiteListSection';
+import BackgroundEffects from '@/components/layout/BackgroundEffects';
+import Footer from '@/components/layout/Footer';
+import GradientBadge from '@/components/ui/GradientBadge';
+import Navbar from '@/components/layout/Navbar';
+import WaitlistSection from '@/components/sections/WaitlistSection';
 
 const faqItems = [
   {
@@ -157,7 +157,7 @@ export default function FAQPage() {
           id="whitelist"
           className="relative z-30 mt-36 overflow-visible px-8 lg:mt-44 lg:px-4"
         >
-          <WhiteListSection />
+          <WaitlistSection />
         </div>
 
         {/* Footer */}

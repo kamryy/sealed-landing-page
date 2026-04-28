@@ -1,4 +1,4 @@
-import ComingSoon from '@/components/ComingSoon';
+import ComingSoon from '@/components/gates/ComingSoon';
 
 export default function ContactPage() {
   return <ComingSoon title="Contact" />;

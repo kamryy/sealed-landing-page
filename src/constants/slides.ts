@@ -1,4 +1,4 @@
-import type { SlideIconType } from '@/components/icons';
+import type { SlideIconType } from '@/components/ui/icons';
 
 export interface Slide {
   heading: string;
