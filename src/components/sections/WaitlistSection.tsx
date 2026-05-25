@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { FormEvent, useState } from 'react';
-import GradientBadge from '@/components/ui/GradientBadge';
+import Image from "next/image";
+import { FormEvent, useState } from "react";
+import GradientBadge from "@/components/ui/GradientBadge";
 
 export default function WaitlistSection() {
-  const [email, setEmail] = useState('');
-  const [wallet, setWallet] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState("");
+  const [wallet, setWallet] = useState("");
+  const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSuccessMessage('');
-    setErrorMessage('');
+    setSuccessMessage("");
+    setErrorMessage("");
 
-    if (!email || !email.includes('@')) {
-      setErrorMessage('Please provide a valid email address.');
+    if (!email || !email.includes("@")) {
+      setErrorMessage("Please provide a valid email address.");
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, wallet, nickname }),
       });
@@ -40,17 +40,17 @@ export default function WaitlistSection() {
 
       if (!response.ok) {
         setErrorMessage(
-          data.error || 'Failed to join waitlist. Please try again.'
+          data.error || "Failed to join waitlist. Please try again.",
         );
         return;
       }
 
-      setSuccessMessage(data.message || 'You have been subscribed!');
-      setEmail('');
-      setWallet('');
-      setNickname('');
+      setSuccessMessage(data.message || "You have been subscribed!");
+      setEmail("");
+      setWallet("");
+      setNickname("");
     } catch {
-      setErrorMessage('Something went wrong. Please try again.');
+      setErrorMessage("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -63,12 +63,12 @@ export default function WaitlistSection() {
         className="pointer-events-none absolute -inset-y-14 left-1/2 -z-10 w-screen -translate-x-1/2 bg-no-repeat opacity-35"
         style={{
           backgroundImage: "url('/assets/whitelist/bg.png')",
-          backgroundSize: 'auto 120%',
-          backgroundPosition: 'center top',
+          backgroundSize: "auto 120%",
+          backgroundPosition: "center top",
         }}
       />
 
-      <div className="relative mx-auto   w-[92%] sm:w-[87%] lg:w-[82%]">
+      <div className="relative mx-auto   w-[98%] sm:w-[87%] lg:w-[82%]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-10 z-0 rounded-[3rem] bg-[radial-gradient(circle_at_50%_55%,rgba(107,250,214,0.34)_0%,rgba(107,250,214,0.18)_35%,rgba(107,250,214,0.04)_60%,rgba(107,250,214,0)_78%)] blur-2xl animate-[sealedHaloPulse_4.2s_ease-in-out_infinite]"
@@ -89,7 +89,7 @@ export default function WaitlistSection() {
               className="absolute inset-0"
               style={{
                 backgroundImage:
-                  'linear-gradient(266deg, #0d0d0d 40.67%, rgba(16, 16, 16, 0) 99.81%), linear-gradient(90deg, #0d0d0d 0%, #0f0f0f 100%)',
+                  "linear-gradient(266deg, #0d0d0d 40.67%, rgba(16, 16, 16, 0) 99.81%), linear-gradient(90deg, #0d0d0d 0%, #0f0f0f 100%)",
               }}
             />
             {/* Subtle corner highlight */}
@@ -97,7 +97,7 @@ export default function WaitlistSection() {
               className="absolute inset-0 opacity-60"
               style={{
                 backgroundImage:
-                  'radial-gradient(circle at 15% 0%, rgba(107,250,214,0.12) 0%, transparent 45%), radial-gradient(circle at 100% 100%, rgba(107,250,214,0.08) 0%, transparent 55%)',
+                  "radial-gradient(circle at 15% 0%, rgba(107,250,214,0.12) 0%, transparent 45%), radial-gradient(circle at 100% 100%, rgba(107,250,214,0.08) 0%, transparent 55%)",
               }}
             />
             {/* Fine grid texture */}
@@ -105,12 +105,12 @@ export default function WaitlistSection() {
               className="absolute inset-0 opacity-[0.04]"
               style={{
                 backgroundImage:
-                  'linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)',
-                backgroundSize: '32px 32px',
+                  "linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
                 maskImage:
-                  'radial-gradient(circle at center, black 0%, transparent 80%)',
+                  "radial-gradient(circle at center, black 0%, transparent 80%)",
                 WebkitMaskImage:
-                  'radial-gradient(circle at center, black 0%, transparent 80%)',
+                  "radial-gradient(circle at center, black 0%, transparent 80%)",
               }}
             />
           </div>
@@ -135,7 +135,7 @@ export default function WaitlistSection() {
 
               <div className="w-full">
                 <h2 className="font-lexend text-[clamp(1.75rem,4vw,3rem)] font-bold leading-[1.02] text-white">
-                  Be the first to experience{' '}
+                  Be the first to experience{" "}
                   <span className="bg-[linear-gradient(93deg,#6bfad6_18%,#ca7344_96%)] bg-clip-text text-transparent">
                     sealed privacy
                   </span>
@@ -150,9 +150,9 @@ export default function WaitlistSection() {
               {/* Perk list */}
               <ul className="mt-1 flex flex-col gap-3 text-white/80">
                 {[
-                  'Priority access at launch',
-                  'Exclusive early-supporter perks',
-                  'Shape the roadmap with direct feedback',
+                  "Priority access at launch",
+                  "Exclusive early-supporter perks",
+                  "Shape the roadmap with direct feedback",
                 ].map((perk) => (
                   <li
                     key={perk}
@@ -216,7 +216,9 @@ export default function WaitlistSection() {
                     className="group relative mt-1 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-sealed-teal px-6 py-3.5 font-lexend text-base font-semibold text-black shadow-[0_10px_30px_rgba(107,250,214,0.25)] transition-all hover:shadow-[0_14px_40px_rgba(107,250,214,0.45)] hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     <span className="relative z-10">
-                      {isSubmitting ? 'Reserving your spot…' : 'Join the whitelist'}
+                      {isSubmitting
+                        ? "Reserving your spot…"
+                        : "Join the whitelist"}
                     </span>
                     {!isSubmitting && (
                       <svg
