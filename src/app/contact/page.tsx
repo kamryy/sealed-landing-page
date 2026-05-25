@@ -38,10 +38,11 @@ export default function ContactPage() {
 
       if (!response.ok) {
         setErrorMessage(
-          data.error || "Failed to join waitlist. Please try again.",
+          data.error || "Something went wrong. Please try again.",
         );
         return;
       }
+
       setSuccessMessage(
         response.status === 200
           ? (data.message as string)
@@ -53,8 +54,10 @@ export default function ContactPage() {
       setErrorMessage("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
-      setSuccessMessage("");
-      setErrorMessage("");
+      setTimeout(() => {
+        setErrorMessage("");
+        setSuccessMessage("");
+      }, 3000);
     }
   };
 
