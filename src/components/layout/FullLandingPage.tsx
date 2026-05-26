@@ -1,14 +1,14 @@
-import BackgroundEffects from '@/components/layout/BackgroundEffects';
-import Footer from '@/components/layout/Footer';
-import Navbar from '@/components/layout/Navbar';
-import FAQSection from '@/components/sections/FAQSection';
-import FreedomSection from '@/components/sections/FreedomSection';
-import HeroSection from '@/components/sections/HeroSection';
-import HowItWorksSection from '@/components/sections/HowItWorksSection';
-import PrivacyFeaturesSection from '@/components/sections/PrivacyFeaturesSection';
-import TokenomicsSection from '@/components/sections/TokenomicsSection';
-import WaitlistSection from '@/components/sections/WaitlistSection';
-import ZeroTraceSection from '@/components/sections/ZeroTraceSection';
+import BackgroundEffects from "@/components/layout/BackgroundEffects";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import FAQSection from "@/components/sections/FAQSection";
+import FreedomSection from "@/components/sections/FreedomSection";
+import HeroSection from "@/components/sections/HeroSection";
+import HowItWorksSection from "@/components/sections/HowItWorksSection";
+import PrivacyFeaturesSection from "@/components/sections/PrivacyFeaturesSection";
+// import TokenomicsSection from "@/components/sections/TokenomicsSection";
+import WaitlistSection from "@/components/sections/WaitlistSection";
+import ZeroTraceSection from "@/components/sections/ZeroTraceSection";
 
 /**
  * Sealed landing page root.
@@ -44,9 +44,11 @@ export default function FullLandingPage() {
           </div>
         </div>
 
-        <div className="section-four-stack relative px-8 lg:px-4 cv-auto">
+        {/*commented for now, because we dont want to display it */}
+        
+        {/* <div className="section-four-stack relative px-8 lg:px-4 cv-auto">
           <TokenomicsSection />
-        </div>
+        </div> */}
 
         <div className="section-gap-md relative px-8 lg:px-4 cv-auto">
           <HowItWorksSection />

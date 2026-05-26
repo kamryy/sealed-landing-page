@@ -135,6 +135,13 @@ export default function ContactPage() {
                     </h2>
                     <p className="mt-4 max-w-xl font-dm-sans text-[clamp(0.95rem,1.15vw,1.125rem)] leading-[1.55] text-white/60">
                       Have questions or feedback? Get in touch with us!
+                      <br />
+                      <a
+                        href="mailto:contact@sealed.channel"
+                        className="text-sealed-teal hover:text-sealed-teal/80 hover:underline transition-colors font-medium"
+                      >
+                        contact@sealed.channel
+                      </a>
                     </p>
                   </div>
                 </div>
