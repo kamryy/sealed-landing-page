@@ -62,7 +62,7 @@ const SOCIALS: Array<{
   },
   {
     label: 'Discord',
-    href: 'https://discord.gg/bYMqbEWby',
+    href: 'https://discord.gg/GUKD8E6xCx',
     icon: ({ className }) => (
       <svg
         viewBox="0 0 24 24"
