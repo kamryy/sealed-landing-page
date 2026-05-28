@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import SwitchButton from "@/components/ui/SwitchButton";
 import B2cForm from "@/components/B2cForm";
 import Image from "next/image";
+import Footer from "@/components/layout/Footer";
 
 import { useState, useRef } from "react";
 import PartnersUseCases from "@/components/PartnersUseCases";
@@ -233,7 +234,7 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
 
               <div className="relative z-10 grid grid-cols-1 gap-10 lg:gap-5">
                 {/* Left: copy */}
-                <div className="flex flex-col items-center gap-6 lg:gap-7">
+                <div className="flex flex-col items-center gap-6 lg:gap-7 mt-5">
                   <GradientBadge>
                     <Image
                       src="/assets/icons/check-circle.svg"
@@ -247,7 +248,7 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
                   </GradientBadge>
 
                   <div className="w-[100%] sm:w-[85%]">
-                    <h2 className="font-lexend flex flex-col text-[clamp(1.8rem,4vw,2.1rem)] text-left font-bold leading-[1.2] text-white">
+                    <h2 className="font-lexend flex flex-col text-[clamp(1.8rem,4vw,2.1rem)]  font-bold leading-[1.2] text-white">
                       Restore privacy in both your private communication and
                       business infrastructure.
                     </h2>
@@ -275,6 +276,10 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
               </div>
             </section>
           </div>
+        </div>
+        {/* Footer */}
+        <div className="relative z-30 mt-10 overflow-visible px-8 lg:mt-14 lg:px-4 pb-8">
+          <Footer />
         </div>
       </div>
 
