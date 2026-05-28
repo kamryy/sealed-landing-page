@@ -25,7 +25,7 @@ export default function WaitlistSection() {
     try {
       setIsSubmitting(true);
 
-      const response = await fetch("/api/waitlist", {
+      const response = await fetch("/api/b2c-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
