@@ -105,8 +105,27 @@ function NavLinks({
       <>
         {NAV_LINKS.map(({ label, href }) => {
           const isActive = href === activeHref;
-          // Jeśli to sekcja (#), prowadź na /#sekcja, inaczej normalnie
+          const isExternal = href.startsWith("http");
           const linkHref = href.startsWith("#") ? `/${href}` : href;
+
+          if (isExternal) {
+            return (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block rounded-lg px-3 py-2 text-sm ${
+                  isActive
+                    ? "bg-white/5 text-white"
+                    : "text-white/80 hover:text-white"
+                } ${isActive ? "" : "mt-1"}`}
+              >
+                {label}
+              </a>
+            );
+          }
+
           return (
             <Link
               key={label}
@@ -121,9 +140,8 @@ function NavLinks({
             </Link>
           );
         })}
-
         <a
-          href="#whitelist"
+          href={"/#whitelist"}
           className="mt-2 block rounded-lg bg-sealed-teal px-3 py-2 text-center text-sm font-semibold text-black"
         >
           Sign up
@@ -136,7 +154,26 @@ function NavLinks({
     <ul className="hidden items-center gap-2 rounded-full p-1 text-sm text-white/80 lg:flex">
       {NAV_LINKS.map(({ label, href }) => {
         const isActive = href === activeHref;
+        const isExternal = href.startsWith("http");
         const linkHref = href.startsWith("#") ? `/${href}` : href;
+
+        if (isExternal) {
+          return (
+            <li key={label}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`rounded-full px-4 py-2 transition-colors ${
+                  isActive ? "bg-white/5 text-white" : "hover:text-white"
+                }`}
+              >
+                {label}
+              </a>
+            </li>
+          );
+        }
+
         return (
           <li key={label}>
             <Link
@@ -156,6 +193,9 @@ function NavLinks({
 
 export default function Navbar() {
   const activeHref = useActiveSection();
+  const pathname = usePathname();
+  const whitelistHref = pathname === "/" ? "#whitelist" : "/#whitelist";
+
   return (
     <header className="sticky top-0 z-50 -mx-5 border border-white/5 bg-[#262626]/30 px-8 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-2xl sm:px-12 lg:top-4 lg:mx-0 lg:rounded-full lg:px-5 lg:py-4">
       <nav className="flex items-center justify-between gap-4">
@@ -176,7 +216,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <a
-          href="#whitelist"
+          href={whitelistHref}
           className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-semibold text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
         >
           Sign up
