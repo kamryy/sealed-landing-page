@@ -138,7 +138,7 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch [&>*]:h-full">
             {partnersUseCases.map((useCase, index) => (
               <PartnersUseCases
                 title={useCase.title}
@@ -149,14 +149,30 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
                 key={index}
               />
             ))}
-          </div>
-
-          <div className="flex align-center justify-center mt-12">
-            <p className="text-md font-bold text-white/80 px-10 w-full sm:w-[80%] md:w-[70%]">
-              Sealed builds isolated, serverless coordination environments
-              engineered to eliminate operational visibility, metadata exposure
-              and centralized retention.
-            </p>
+            <div
+              className="min-h-[447px] lg:min-h-0 relative group flex flex-col items-center justify-center rounded-[15px] text-center shadow-[0_1.25px_2.5px_rgba(0,0,0,0.05)] ring-1 ring-transparent transition-all duration-300 ease-out "
+              style={{
+                backgroundImage:
+                  "linear-gradient(203deg, rgba(26,26,26,0) 0%, rgba(26,26,26,0.2) 40%), linear-gradient(90deg, rgba(28,28,28,0.2) 0%, rgba(28,28,28,0.2) 100%)",
+              }}
+            >
+              <div
+                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300
+               bg-[linear-gradient(93.59deg,#6BFAD6_18.6%,#CA7344_96.15%)]"
+                style={{
+                  WebkitMask:
+                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  WebkitMaskComposite: "xor",
+                  maskComposite: "exclude",
+                  padding: "1px",
+                }}
+              />
+              <p className="text-md font-bold text-white/80 px-10 w-full ">
+                Sealed builds isolated, serverless coordination environments
+                engineered to eliminate operational visibility, metadata
+                exposure and centralized retention.
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-center background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(circle, black 0%, transparent 80%); relative mt-20">
@@ -217,7 +233,7 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
 
               <div className="relative z-10 grid grid-cols-1 gap-10 lg:gap-5">
                 {/* Left: copy */}
-                <div className="flex flex-col items-start gap-6 lg:gap-7">
+                <div className="flex flex-col items-center gap-6 lg:gap-7">
                   <GradientBadge>
                     <Image
                       src="/assets/icons/check-circle.svg"
@@ -231,7 +247,7 @@ Telegram regularly encounters leaks of databases linking user IDs to phone numbe
                   </GradientBadge>
 
                   <div className="w-[100%] sm:w-[85%]">
-                    <h2 className="font-lexend flex flex-col text-[clamp(1.75rem,4vw,2.1rem)] text-left font-bold leading-[1.02] text-white">
+                    <h2 className="font-lexend flex flex-col text-[clamp(1.8rem,4vw,2.1rem)] text-left font-bold leading-[1.2] text-white">
                       Restore privacy in both your private communication and
                       business infrastructure.
                     </h2>
