@@ -25,9 +25,9 @@ kod odwzorowuje działający przepływ.
 
 **Ważne — prywatność:** żadne wywołanie do algod ani do endpointu dostawy nie może
 iść bezpośrednio z przeglądarki. Wszystko przechodzi przez własne route handlery
-Next.js (sekcja 4) — na testnecie relayują zwykłym HTTPS (serwer LP ukrywa IP
-kupującego), pełne OHTTP to TODO przed mainnetem. W kodzie poniżej `ALGOD` i `fetch`
-oznaczają wywołania do **własnego backendu**, nie do publicznego węzła.
+Next.js (sekcja 4), które owijają ruch w **OHTTP** — relay i gateway widzą tylko
+fragment, żaden nie powiąże kupującego z zapytaniem. W kodzie poniżej `ALGOD`
+i `fetch` oznaczają wywołania do **własnego backendu**, nie do publicznego węzła.
 
 ---
 
@@ -352,59 +352,82 @@ usunięty. Kod wkleja w aplikacji mobilnej Sealed, by odebrać kredyty.
 
 ---
 
-## 4. Endpointy i route handlery
+## 4. Endpointy i route handlery (OHTTP)
 
-*Po co: backend LP pośredniczy w ruchu do algod i indexera — ukrywa kupującego i spełnia wymóg prywatności (przeglądarka nigdy nie woła węzła wprost).*
+*Po co: backend LP pośredniczy w ruchu do algod i indexera, owijając go w OHTTP — relay widzi szyfrogram + IP, gateway widzi treść + cel, ale żaden nie ma obu naraz. Przeglądarka nigdy nie woła węzła wprost.*
 
-`/api/algod` i `/api/delivery` to **nie gotowe routey** — budujesz je razem z resztą
-tej integracji. Poniżej wersja **gotowa na testnet** (server-side relay zwykłym
-HTTPS). Serwer LP jest pośrednikiem → ukrywa IP kupującego przed węzłem/indekserem.
-Pełne OHTTP (jak w aplikacji mobilnej) to TODO przed mainnetem — patrz koniec sekcji.
+`/api/algod` i `/api/delivery` budujesz w ramach tej integracji. **OHTTP to jedyne,
+właściwe podejście** — to samo, co aplikacja mobilna; działa od razu na testnecie.
+Klient w przeglądarce (sekcje 2–3) **nie zmienia się** — cała logika OHTTP siedzi
+w route handlerach (server-side, Node runtime).
 
-### 4a. Konfiguracja (`.env.local`)
+Klient OHTTP jest **przetestowany** (vendored z Sealed indexera, zgodny bajt-w-bajt
+z aplikacją mobilną). Samo okablowanie route'ów + cel dostawy przez bramę Pi
+zweryfikuj jednym żądaniem na testnecie.
 
-*Adresy backendów, do których pośredniczą route handlery.*
+### 4a. Konfiguracja i klient OHTTP
+
+*Pliki klienta OHTTP + zmienne z adresami relay / gateway / target.*
+
+**Pliki klienta (już w repo)** — `src/lib/ohttp/`: `ohttp-client.ts`,
+`ohttp-config.ts`, `binary-http.ts`. **Nie ruszaj krypto** — komentarze w środku
+dokumentują pułapki (eksport sekretu `Nk=16`, układ nagłówka, info-stringi).
+Obsługiwany zestaw: `DHKEM(X25519, HKDF-SHA256)/HKDF-SHA256/AES-128-GCM`.
+
+**`.env.local`:**
 
 ```bash
-# Algod (testnet, publiczny — bez tokenu)
-ALGOD_URL=https://testnet-api.algonode.cloud
-# Sealed indexer — tu żyje /delivery/:hex (Pi + Tailscale Funnel)
-SEALED_INDEXER_URL=https://sealed-pi.taile8602b.ts.net
+# algod przez OHTTP
+ALGOD_OHTTP_TARGET=https://testnet-api.4160.nodely.dev
+ALGOD_OHTTP_RELAY=https://relay.oblivious.network/great-apple-60
+ALGOD_OHTTP_GATEWAY_CONFIG=https://ohttp.nodely.io/ohttp-configs
+# dostawa (Sealed indexer) przez OHTTP — brama na Pi
+DELIVERY_OHTTP_TARGET=https://sealed-pi.taile8602b.ts.net
+DELIVERY_OHTTP_RELAY=https://relay.oblivious.network/groovy-guide-67
+DELIVERY_OHTTP_GATEWAY_CONFIG=https://sealed-pi.taile8602b.ts.net/ohttp-configs
 ```
 
 Po stronie Sealed indexera musi być ustawione `PREIMAGE_UPSTREAM_URL` (wskazuje na
 preimage-server), inaczej `/delivery/:hex` zwraca 404. To konfiguracja operatora
 indexera, nie LP.
 
-### 4b. Route OHTTP Proxy algod — `src/app/api/algod/[...path]/route.ts`
+### 4b. Route algod (OHTTP) — `src/app/api/algod/[...path]/route.ts`
 
-*Przekazuje wszystkie wywołania algosdk (odczyt globali/boxów, params, submit) do węzła — jeden proxy na cały algod.*
-
-Obsługuje też ciało binarne (submit transakcji).
+*Owija każde wywołanie algosdk (globale, boxy, params, submit) w OHTTP — jeden proxy na cały algod.*
 
 ```ts
 import { NextRequest } from 'next/server';
+import { createOhttpClient } from '@/lib/ohttp/ohttp-client';
 
-const ALGOD = process.env.ALGOD_URL ?? 'https://testnet-api.algonode.cloud';
+export const runtime = 'nodejs'; // node:crypto — NIE edge
 
-// Przekazuje pojedyncze żądanie do węzła algod, zachowując metodę, ścieżkę i ciało.
+const TARGET = process.env.ALGOD_OHTTP_TARGET!;
+const RELAY = process.env.ALGOD_OHTTP_RELAY!;
+const GATEWAY_CONFIG = process.env.ALGOD_OHTTP_GATEWAY_CONFIG!;
+
+// Key-config bramy jest stabilny — pobierz raz na proces i trzymaj w cache.
+let cfg: Promise<Buffer> | null = null;
+const keyConfigFetcher = () =>
+  (cfg ??= fetch(GATEWAY_CONFIG).then(async (r) => Buffer.from(await r.arrayBuffer())));
+
+const ohttp = createOhttpClient({ relayUrl: RELAY, keyConfigFetcher });
+
+// Owija pojedyncze żądanie algod w OHTTP i zwraca odpowiedź.
 async function proxy(req: NextRequest, path: string[]): Promise<Response> {
-  const url = `${ALGOD}/${path.join('/')}${req.nextUrl.search}`;
-  const init: RequestInit = {
-    method: req.method,
+  const url = `${TARGET}/${path.join('/')}${req.nextUrl.search}`;
+  const body =
+    req.method === 'GET' || req.method === 'HEAD'
+      ? Buffer.alloc(0)
+      : Buffer.from(await req.arrayBuffer());
+  const res = await ohttp.send({
+    method: req.method as 'GET' | 'POST',
+    url,
     headers: { 'content-type': req.headers.get('content-type') ?? 'application/json' },
-  };
-  if (req.method !== 'GET' && req.method !== 'HEAD') {
-    init.body = Buffer.from(await req.arrayBuffer()); // submit = surowe bajty
-  }
-  const res = await fetch(url, init);
-  return new Response(res.body, {
-    status: res.status,
-    headers: { 'content-type': res.headers.get('content-type') ?? 'application/json' },
+    body,
   });
+  return new Response(res.body, { status: res.status });
 }
 
-// Wejścia route handlera — odczyty (GET) i submit/params (POST).
 export async function GET(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
   return proxy(req, (await ctx.params).path);
 }
@@ -413,50 +436,49 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ path: stri
 }
 ```
 
-### 4c. Route OHTTP Proxy dostawy — `src/app/api/delivery/[hex]/route.ts`
+### 4c. Route dostawy (OHTTP) — `src/app/api/delivery/[hex]/route.ts`
 
-*Przekazuje pobranie zaszyfrowanej paczki do Sealed indexera i zwraca surowe bajty kupującemu.*
+*Pobiera zaszyfrowaną paczkę z Sealed indexera przez OHTTP i zwraca surowe bajty kupującemu.*
 
 ```ts
 import { NextRequest } from 'next/server';
+import { createOhttpClient } from '@/lib/ohttp/ohttp-client';
 
-const INDEXER = process.env.SEALED_INDEXER_URL ?? 'https://sealed-pi.taile8602b.ts.net';
+export const runtime = 'nodejs';
 
-// Waliduje klucz (64 hex) i strumieniuje ciphertext z /delivery/:hex indexera.
+const TARGET = process.env.DELIVERY_OHTTP_TARGET!;
+const RELAY = process.env.DELIVERY_OHTTP_RELAY!;
+const GATEWAY_CONFIG = process.env.DELIVERY_OHTTP_GATEWAY_CONFIG!;
+
+let cfg: Promise<Buffer> | null = null;
+const keyConfigFetcher = () =>
+  (cfg ??= fetch(GATEWAY_CONFIG).then(async (r) => Buffer.from(await r.arrayBuffer())));
+
+const ohttp = createOhttpClient({ relayUrl: RELAY, keyConfigFetcher });
+
+// Waliduje klucz (64 hex) i pobiera ciphertext z /delivery/:hex przez OHTTP.
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ hex: string }> }) {
   const { hex } = await ctx.params;
-  if (!/^[0-9a-f]{64}$/.test(hex)) {
-    return new Response('not found', { status: 404 });
-  }
-  const res = await fetch(`${INDEXER}/delivery/${hex}`, { cache: 'no-store' });
+  if (!/^[0-9a-f]{64}$/.test(hex)) return new Response('not found', { status: 404 });
+  const res = await ohttp.send({
+    method: 'GET',
+    url: `${TARGET}/delivery/${hex}`,
+    headers: {},
+    body: Buffer.alloc(0),
+  });
   return new Response(res.body, {
     status: res.status,
-    headers: {
-      'content-type': res.headers.get('content-type') ?? 'application/octet-stream',
-      'cache-control': 'no-store',
-    },
+    headers: { 'content-type': 'application/octet-stream', 'cache-control': 'no-store' },
   });
 }
 ```
 
 To wystarczy, by cały przepływ działał na testnecie end-to-end.
 
-### 4d. TODO przed mainnetem — pełne OHTTP
-
-*Docelowo oba proxy owijają żądanie w OHTTP, by nawet relay/gateway nie powiązały kupującego z zapytaniem.*
-
-Wariant powyżej ukrywa IP kupującego (serwer LP pośredniczy), ale relay/gateway nie
-są użyte. Docelowo oba route handlery owijają żądanie w OHTTP — te same parametry co
-aplikacja mobilna (`sealed_app/lib/core/constants.dart`):
-
-| Cel | Relay | Gateway config | Target |
-|---|---|---|---|
-| algod | `relay.oblivious.network/great-apple-60` | `ohttp.nodely.io/ohttp-configs` | `testnet-api.4160.nodely.dev` |
-| Sealed indexer (`/delivery`) | `relay.oblivious.network/groovy-guide-67` | `sealed-pi…/ohttp-configs` (path `/gateway`) | `sealed-pi.taile8602b.ts.net` |
-
-Wymaga enkapsulatora OHTTP w TS (HPKE pakuje całe żądanie HTTP) — w aplikacji
-mobilnej to `OhttpClient`/`OhttpEncapsulator` (Dart). Nie jest potrzebny do
-uruchomienia na testnecie; dorób przed produkcją.
+> Diagnostyka: jeśli relay zwraca 400 — najczęściej niezgodny zestaw szyfrów
+> (`Unsupported OHTTP suite …` z `ohttp-client.ts`) albo brama wymaga ścieżki
+> `/gateway` doklejonej do `*_OHTTP_RELAY`. Brama Pi używa *legacy* endpointu
+> `/ohttp-configs` (KEM_X25519) — pasuje do tego klienta.
 
 ---
 
