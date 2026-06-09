@@ -9,21 +9,30 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@txnlab/use-wallet-react": "^4.6.0",
+    "algosdk": "^3.5.2",
     "better-sqlite3": "^12.6.2",
+    "hpke-js": "^1.8.0",
     "next": "16.1.6",
     "postgres": "^3.4.9",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@agoralabs-sh/avm-web-provider": "^1.7.0",
+    "@blockshake/defly-connect": "^1.2.1",
+    "@perawallet/connect": "^1.5.2",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@walletconnect/modal": "^2.7.0",
+    "@walletconnect/sign-client": "^2.23.9",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "lute-connect": "^1.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
