@@ -214,13 +214,22 @@ export default function Navbar() {
         {/* Desktop links */}
         <NavLinks activeHref={activeHref} />
 
-        {/* Desktop CTA */}
-        <a
-          href={whitelistHref}
-          className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-semibold text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
-        >
-          Sign up
-        </a>
+        <div>
+          <a
+            href="/top-up-wallet"
+            className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-sealed-teal transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
+          >
+            Top up wallet
+          </a>
+
+          {/* Desktop CTA */}
+          <a
+            href={whitelistHref}
+            className="hidden rounded-full bg-sealed-teal px-5 py-2.5 text-sm font-semibold text-black transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
+          >
+            Sign up
+          </a>
+        </div>
 
         {/* Mobile menu */}
         <details className="group relative lg:hidden">

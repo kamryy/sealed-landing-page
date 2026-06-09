@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import { FormEvent, useState } from "react";
-import GradientBadge from "@/components/ui/GradientBadge";
 import SelectField from "@/components/ui/SelectField";
 
 export default function B2bForm() {
