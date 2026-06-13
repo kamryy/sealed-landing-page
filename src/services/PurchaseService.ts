@@ -122,7 +122,7 @@ async function buildPurchaseGroup(
     sender: buyerAddress,
     receiver: appAddress,
     amount: total,
-    //@ts-expect-error test
+    //@ts-expect-error number
     suggestedParams: { ...sp, fee: 1000n, flatFee: true },
   });
 
@@ -144,7 +144,7 @@ async function buildPurchaseGroup(
       deliveryPub,
     ],
     boxes,
-    //@ts-expect-error test
+    //@ts-expect-error number
     suggestedParams: { ...sp, fee: 2000n, flatFee: true },
   });
 
