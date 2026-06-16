@@ -45,7 +45,7 @@ export default function CollectingWalletStepOne({
   }, [activeWallet?.isActive, onStatusChange]);
 
   return (
-    <div className="flex items-center flex-col gap-4">
+    <div className="flex flex-1 items-center flex-col gap-4 w-full">
       <ConnectingWalletHeader
         title="Connect Wallet"
         subTitle="Get started by connecting Your prefered wallet"

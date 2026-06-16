@@ -15,7 +15,7 @@ export default function CollectingWalletStepTwo({
   };
 
   return (
-    <div className="flex items-center flex-col gap-10 h-full w-full flex flex-col items-center justify-between">
+    <div className="flex flex-1 flex-col gap-10 w-full items-center justify-between">
       <div className="flex flex-col gap-2 mr-auto">
         <ConnectingWalletHeader
           title="Top up instructions"

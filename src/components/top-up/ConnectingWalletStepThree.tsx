@@ -107,7 +107,7 @@ export default function CollectingWalletStepThree({
   const insufficient = remaining < 0;
 
   return (
-    <div className="flex items-center flex-col gap-6 h-full w-full flex flex-col items-center justify-between">
+    <div className="flex flex-1 flex-col gap-6 w-full items-center justify-between">
       <div className="flex flex-col gap-2 mr-auto">
         <p className="text-2xl sm:text-4xl font-bold ">Exchange ALGO for messages</p>
         <p className="text-base sm:text-xl text-[#b3b3b3]">
@@ -119,7 +119,7 @@ export default function CollectingWalletStepThree({
 
         <div className="flex gap-10 flex-col mt-5 text-[#b3b3b3]">
           <div
-            className={`flex flex-col w-fit gap-2 rounded-lg px-4 py-3 border ${
+            className={`flex flex-col w-fit max-w-full sm:max-w-[280px] gap-2 rounded-xl px-4 py-3 border ${
               insufficient
                 ? "border-red-500 bg-red-500/10"
                 : "border-sealed-teal"
@@ -149,21 +149,24 @@ export default function CollectingWalletStepThree({
               {remaining.toFixed(3)} ALGO
             </p>
             {insufficient && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-red-500 whitespace-normal break-words leading-snug">
                 You don&apos;t have enough balance
               </p>
             )}
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-8">
-            <div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center  gap-4 sm:gap-8">
+            <div className="flex flex-col items-start gap-2">
               <p className="text-sm text-white">Code quantity (max {MAX_CODES})</p>
               <input
                 placeholder="Insert number of credits"
-                className="w-full sm:w-fit bg-[#2a2a2a] border border-[#404040] rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-sealed-teal transition"
+                className="w-full sm:w-fit bg-[#2a2a2a] border border-[#404040] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-sealed-teal transition"
                 type="text"
                 value={selectedQuantity}
                 onChange={countMessages}
               />
+              <p className="text-sm text-transparent ">
+            x
+              </p>
             </div>
 
             <Image
@@ -173,13 +176,13 @@ export default function CollectingWalletStepThree({
               height="16"
             />
 
-            <div className="flex flex-col items-start sm:items-end">
+            <div className="flex flex-col items-start sm:items-end gap-2">
               <p className="text-sm text-white">
                 Message received in Sealed app
               </p>
               <input
                 placeholder="0"
-                className="w-full text-center bg-[#2a2a2a] border border-[#404040] rounded-lg px-4 py-3 text-white placeholder-zinc-500 focus:outline-none border-sealed-teal transition"
+                className="w-full text-center bg-[#2a2a2a] border border-[#404040] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none border-sealed-teal transition"
                 type="text"
                 disabled
                 value={messagesCount.toString()}

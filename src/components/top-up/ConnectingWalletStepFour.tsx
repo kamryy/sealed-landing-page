@@ -47,7 +47,7 @@ export default function CollectingWalletStepFour({
   };
 
   return (
-    <div className="flex items-center flex-col gap-6 h-full w-full flex flex-col items-center justify-between">
+    <div className="flex flex-1 flex-col gap-6 w-full items-center justify-between">
       <div className="flex flex-col gap-2 mr-auto w-full">
         <ConnectingWalletHeader
           title="Important information"

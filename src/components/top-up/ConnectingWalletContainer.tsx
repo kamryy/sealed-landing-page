@@ -94,7 +94,7 @@ export default function ConnectingWalletContainer() {
         />
       </div>
 
-      <div className="rounded-b-2xl p-4 sm:p-10 w-full min-h-[500px] lg:h-[500px] bg-[#1c1c1c]">
+      <div className="rounded-b-2xl p-4 sm:p-10 w-full min-h-[500px] flex flex-col bg-[#1c1c1c]">
         {currentStep === 1 && (
           <ConnectingWalletStepOne onStatusChange={handleStatusChange} />
         )}

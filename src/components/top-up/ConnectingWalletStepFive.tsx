@@ -81,7 +81,7 @@ export default function CollectingWalletStepFive({
           background: rgba(255, 255, 255, 0.25);
         }
       `}</style>
-      <div className="gap-6 h-full w-full flex flex-col items-center justify-between">
+      <div className="gap-6 flex-1 min-h-0 w-full flex flex-col items-center justify-between">
         <div className="flex flex-col gap-2 w-full h-full min-h-0">
           <p className="text-2xl sm:text-4xl font-bold ">Keep Your codes</p>
           <p className="text-base sm:text-xl text-[#b3b3b3]">
