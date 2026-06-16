@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 
 const DEV_ACCESS_COOKIE = 'sealed-dev-access';
+
+// Reports whether the caller holds a valid dev-access cookie. Used by the
+// navbar to decide whether to show the (pre-launch dev-gated) top-up link.
+export async function GET() {
+  const unlocked =
+    (await cookies()).get(DEV_ACCESS_COOKIE)?.value === 'granted';
+  return NextResponse.json({ unlocked });
+}
 
 export async function POST(request: Request) {
   try {

@@ -3,8 +3,7 @@ import { Aead, CipherSuite, Kdf, Kem } from "hpke-js";
 
 // ─── Konfiguracja ────────────────────────────────────────────────────────────
 
-//@ts-expect-error test
-const APP_ID = 763452863n;
+const APP_ID = BigInt(process.env.NEXT_PUBLIC_SEALED_APP_ID ?? "763452863");
 
 const ALGOD_BASE = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/algod`;
 
@@ -15,8 +14,12 @@ const ALGOD_BASE = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
 
 export const ALGOD = new algosdk.Algodv2("", ALGOD_BASE, "");
 
-// @ts-expect-error - do usunięcia przed wypuszczeniem na maina!!!!!!!!!!!!!!!!!!!!!
-ALGOD.c.bc.baseURL.port = "3000";
+// Local dev only: Next serves on :3000, so the algod proxy lives there too.
+// In prod ALGOD_BASE is an https origin (port 443) — forcing :3000 breaks it.
+if (ALGOD_BASE.includes("localhost")) {
+  // @ts-expect-error - nadpisujemy wewnętrzny fetch
+  ALGOD.c.bc.baseURL.port = "3000";
+}
 
 const SUITE = new CipherSuite({
   kem: Kem.DhkemX25519HkdfSha256,
