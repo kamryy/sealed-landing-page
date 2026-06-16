@@ -163,6 +163,7 @@ export async function purchase(
   signTransactions: (
     txns: algosdk.Transaction[],
   ) => Promise<(Uint8Array | null)[]>,
+  onSigned?: () => void,
 ): Promise<PurchaseResult> {
   const { publicKey: deliveryPub, privateKey: deliveryPriv } =
     await generateDeliveryKeypair();
@@ -174,6 +175,9 @@ export async function purchase(
   const group = await buildPurchaseGroup(activeAddress, qty, deliveryPub);
 
   const signed = await signTransactions(group);
+
+  // Signed — now broadcasting and waiting for on-chain confirmation.
+  onSigned?.();
 
   const sent = await ALGOD.sendRawTransaction(
     signed.filter(Boolean) as Uint8Array[],

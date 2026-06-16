@@ -42,16 +42,18 @@ export default function ConnectingWalletModal({
   const mounted = useIsMounted();
 
   useEffect(() => {
-    if (activeWallet?.isActive) {
+    // Loading modal must stay open while tx signs/confirms — wallet is already
+    // active at that point, so auto-close would dismiss it instantly.
+    if (activeWallet?.isActive && !isLoadingModal) {
       onClose();
     }
-  }, [activeWallet?.isActive, onClose]);
+  }, [activeWallet?.isActive, onClose, isLoadingModal]);
 
   if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[900]">
-      <div className="rounded-2xl p-8 w-full max-w-md flex flex-col items-center relative">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[900] p-4">
+      <div className="rounded-2xl p-0 sm:p-8 w-full max-w-md flex flex-col items-center relative">
         <div className="py-4 px-6 flex items-center justify-between w-full bg-[#141414] border-b border-[rgba(255,255,255,0.1)] px-4 py-2 rounded-t-lg">
           <p className="text-white text-xl">{headerText}</p>
           <button

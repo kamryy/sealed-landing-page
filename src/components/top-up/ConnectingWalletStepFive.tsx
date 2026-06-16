@@ -1,60 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ConnectingWalletModal from "@/components/top-up/ConnectingWalletModal";
 import Image from "next/image";
 
-import { fetchCodes } from "@/services/PurchaseService";
+import type { CodeItem } from "./ConnectingWalletContainer";
 
-// Konwersja z hex string na Uint8Array
-function hexToUint8Array(hex: string): Uint8Array {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-  }
-  return bytes;
-}
-
-interface CollectingWalletStepTwoProps {
+interface CollectingWalletStepFiveProps {
   onStatusChange?: (step: number) => void;
+  codes: CodeItem[];
+  loading: boolean;
+  error?: string | null;
 }
 
-interface CodeItem {
-  id: number;
-  code: string;
+// Insert a dash every 4 characters for readability (display only).
+function formatCode(code: string): string {
+  return code.replace(/(.{4})(?=.)/g, "$1-");
 }
 
 export default function CollectingWalletStepFive({
   onStatusChange,
-}: CollectingWalletStepTwoProps) {
+  codes,
+  loading,
+  error,
+}: CollectingWalletStepFiveProps) {
   const [connectWalletModalOpen, setConnectWalletModalOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<number[]>([]);
-  const [codes, setCodes] = useState<CodeItem[]>([]);
-
-  useEffect(() => {
-    const loadCodes = async () => {
-      const pubHex = sessionStorage.getItem("deliveryPub") ?? "";
-      const privHex = sessionStorage.getItem("deliveryPriv") ?? "";
-
-      if (!pubHex || !privHex) {
-        console.error("Brak kluczy w sessionStorage");
-        return;
-      }
-
-      const deliveryPub = hexToUint8Array(pubHex);
-      const deliveryPriv = hexToUint8Array(privHex);
-
-      const fetchedCodes = await fetchCodes(deliveryPub, deliveryPriv);
-      setCodes(
-        fetchedCodes.map((code, index) => ({
-          id: index + 1,
-          code,
-        })),
-      );
-    };
-
-    loadCodes();
-  }, []);
 
   const copyToClipboard = (code: string, codeId: number) => {
     navigator.clipboard.writeText(code);
@@ -111,9 +82,9 @@ export default function CollectingWalletStepFive({
         }
       `}</style>
       <div className="gap-6 h-full w-full flex flex-col items-center justify-between">
-        <div className="flex flex-col gap-2 w-full">
-          <p className="text-4xl font-bold ">Keep Your codes</p>
-          <p className="text-xl text-[#b3b3b3]">
+        <div className="flex flex-col gap-2 w-full h-full min-h-0">
+          <p className="text-2xl sm:text-4xl font-bold ">Keep Your codes</p>
+          <p className="text-base sm:text-xl text-[#b3b3b3]">
             Copy the codes below to a location of Your choice, or <br />
             download the .txt file containing all the generated codes.
           </p>
@@ -135,7 +106,7 @@ export default function CollectingWalletStepFive({
 
           <div
             id="codesScrollContainer"
-            className="bg-[rgba(0,0,0,0.25)] overflow-hidden overflow-y-auto p-4 w-full h-[370px] scroll-y rounded-xl border border-[#262626] text-[#b3b3b3b] mt-4"
+            className="bg-[rgba(0,0,0,0.25)] overflow-y-auto overflow-x-auto p-4 w-full flex-1 min-h-0 scroll-y rounded-xl border border-[#262626] text-[#b3b3b3b] mt-4"
           >
             {codes.length > 0 ? (
               <table className="w-full text-sm bg-[rgba(0,0,0,0.25)]">
@@ -161,7 +132,7 @@ export default function CollectingWalletStepFive({
                     >
                       <td className="py-3 px-3 text-[#b3b3b3]">{item.id}</td>
                       <td className="py-3 px-3 font-mono text-[#e0e0e0]">
-                        {item.code}
+                        {formatCode(item.code)}
                       </td>
                       <td className="py-3 px-3">
                         <span
@@ -192,23 +163,39 @@ export default function CollectingWalletStepFive({
                   ))}
                 </tbody>
               </table>
+            ) : loading ? (
+              <div className="flex flex-col gap-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-4 animate-pulse"
+                  >
+                    <div className="h-4 w-8 rounded bg-[rgba(255,255,255,0.08)]" />
+                    <div className="h-4 flex-1 rounded bg-[rgba(255,255,255,0.08)]" />
+                    <div className="h-4 w-16 rounded bg-[rgba(255,255,255,0.08)]" />
+                    <div className="h-4 w-8 rounded bg-[rgba(255,255,255,0.08)]" />
+                  </div>
+                ))}
+              </div>
             ) : (
-              <div className="flex items-center justify-center h-full text-[#b3b3b3]">
-                <p>No codes available</p>
+              <div className="flex items-center justify-center h-full text-center px-4">
+                <p className={error ? "text-red-500" : "text-[#b3b3b3]"}>
+                  {error ?? "No codes available"}
+                </p>
               </div>
             )}
           </div>
 
           <div className="flex mt-4 justify-between w-full">
             <button
-              className="px-10 py-3 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.2)] "
+              className="px-6 sm:px-10 py-3 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.2)] "
               onClick={() => onStatusChange?.(3)}
             >
               Back
             </button>
 
             <button
-              className="px-10 py-2 rounded-xl cursor-pointer bg-sealed-teal text-black"
+              className="px-6 sm:px-10 py-2 rounded-xl cursor-pointer bg-sealed-teal text-black"
               onClick={openModal}
             >
               Finish

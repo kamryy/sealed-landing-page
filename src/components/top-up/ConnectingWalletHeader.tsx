@@ -9,8 +9,8 @@ export default function ConnectingWalletHeader({
 }: ConnectingWalletHeaderProps) {
   return (
     <div className="flex flex-col gap-2 mr-auto">
-      <p className="text-4xl font-bold ">{title}</p>
-      <p className="text-xl text-[#b3b3b3]">{subTitle}</p>
+      <p className="text-2xl sm:text-4xl font-bold ">{title}</p>
+      <p className="text-base sm:text-xl text-[#b3b3b3]">{subTitle}</p>
     </div>
   );
 }

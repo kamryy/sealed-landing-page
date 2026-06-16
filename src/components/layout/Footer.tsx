@@ -4,7 +4,7 @@ const FOOTER_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'Careers', href: '/careers' },
   { label: 'About', href: '/about' },
-  { label: 'Security', href: '/security' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 const SOCIALS: Array<{

@@ -12,5 +12,4 @@ export const NAV_LINKS: NavLink[] = [
   { label: "FAQ", href: "#faq" },
   { label: "Docs", href: "https://docs.sealed.channel/" },
   { label: "Partners", href: "/partners" },
-  { label: "Contact", href: "/contact" },
 ];

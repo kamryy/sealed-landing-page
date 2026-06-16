@@ -224,13 +224,13 @@ export default function Navbar() {
         {/* Desktop links */}
         <NavLinks activeHref={activeHref} />
 
-        <div>
+        <div className="flex items-center gap-2 whitespace-nowrap">
           {topUpUnlocked && (
             <a
-              href="/top-up-wallet"
+              href="/top-up"
               className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-sealed-teal transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
             >
-              Top up wallet
+              Top up
             </a>
           )}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ConnectingWalletModal from "@/components/top-up/ConnectingWalletModal";
 import { useWallet, Wallet } from "@txnlab/use-wallet-react";
@@ -35,6 +35,15 @@ export default function CollectingWalletStepOne({
     }
   };
 
+  // Skip the connect step whenever a wallet is already active — covers both
+  // finishing a fresh connect and landing here with a previously-connected wallet.
+  useEffect(() => {
+    if (activeWallet?.isActive) {
+      setConnectWalletModalOpen(false);
+      onStatusChange?.(2);
+    }
+  }, [activeWallet?.isActive, onStatusChange]);
+
   return (
     <div className="flex items-center flex-col gap-4">
       <ConnectingWalletHeader
@@ -42,22 +51,23 @@ export default function CollectingWalletStepOne({
         subTitle="Get started by connecting Your prefered wallet"
       />
 
-      <div className="mt-6 mb-12 flex items-center gap-4">
+      <div className="mt-6 mb-12 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
         {wallets.map((w) => (
           <button
             onClick={() => connectWallet(w)}
             key={w.id}
-            className={`w-[200px] h-[200px] flex items-center focus:border focus:border-sealed-teal bg-[#262626] hover:bg-[#333333] justify-center cursor-pointer gap-4 mb-4 flex-col rounded-lg ${
+            className={`w-full sm:w-[200px] h-[140px] sm:h-[200px] flex items-center focus:border focus:border-sealed-teal bg-[#262626] hover:bg-[#333333] justify-center cursor-pointer gap-4 mb-4 flex-col rounded-xl ${
               selectedWallet?.id === w.metadata.name
                 ? "border border-sealed-teal"
                 : ""
             }`}
           >
             <Image
+              className="rounded-lg"
               src={w.metadata.icon}
               alt={w.metadata.icon}
-              width={24}
-              height={24}
+              width={36}
+              height={36}
             />
             {w.metadata.name}
           </button>
