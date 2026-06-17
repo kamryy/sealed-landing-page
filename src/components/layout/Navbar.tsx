@@ -196,16 +196,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const whitelistHref = pathname === "/" ? "#whitelist" : "/#whitelist";
 
-  // Top-up is dev-gated until launch: only show the link once the
-  // sealed-dev-access cookie is present (reported by GET /api/dev-access).
-  const [topUpUnlocked, setTopUpUnlocked] = useState(false);
-  useEffect(() => {
-    fetch("/api/dev-access")
-      .then((r) => (r.ok ? r.json() : { unlocked: false }))
-      .then((d) => setTopUpUnlocked(Boolean(d.unlocked)))
-      .catch(() => {});
-  }, []);
-
   return (
     <header className="sticky top-0 z-50 -mx-5 border border-white/5 bg-[#262626]/30 px-8 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-2xl sm:px-12 lg:top-4 lg:mx-0 lg:rounded-full lg:px-5 lg:py-4">
       <nav className="flex items-center justify-between gap-4">
@@ -225,14 +215,12 @@ export default function Navbar() {
         <NavLinks activeHref={activeHref} />
 
         <div className="flex items-center gap-2 whitespace-nowrap">
-          {topUpUnlocked && (
-            <a
-              href="/top-up"
-              className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-sealed-teal transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
-            >
-              Top up
-            </a>
-          )}
+          <a
+            href="/top-up"
+            className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-sealed-teal transition-transform duration-200 hover:scale-[1.02] lg:inline-flex"
+          >
+            Top up
+          </a>
 
           {/* Desktop CTA */}
           <a
