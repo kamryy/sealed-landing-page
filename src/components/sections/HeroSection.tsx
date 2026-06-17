@@ -41,7 +41,8 @@ export default function HeroSection() {
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
           <a
-            href="#whitelist"
+            href="/download/sealed-latest.apk"
+            download
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-sealed-teal px-6 py-3 text-lg font-semibold text-black transition-transform duration-200 hover:scale-[1.02] sm:inline-flex sm:w-auto"
           >
             <svg
@@ -59,8 +60,7 @@ export default function HeroSection() {
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-3">
               <a
-                href="/download/sealed-latest.apk"
-                download
+              
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 transition-all duration-200 hover:scale-[1.03]"
               >
                 <svg
@@ -77,10 +77,10 @@ export default function HeroSection() {
                 </svg>
                 <span className="flex flex-col text-left leading-none text-white">
                   <span className="text-[9px] font-normal uppercase tracking-wide text-white/80">
-                    Download for
+                    Get on
                   </span>
                   <span className="-mt-0.5 text-base font-semibold">
-                    Android (APK)
+                    Google Play 
                   </span>
                 </span>
               </a>
@@ -106,7 +106,7 @@ export default function HeroSection() {
               </div>
             </div>
             <span className="text-sm font-medium text-white/60">
-              iOS coming soon
+               coming soon
             </span>
           </div>
         </div>
