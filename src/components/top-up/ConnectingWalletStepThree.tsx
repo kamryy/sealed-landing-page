@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useWallet } from "@txnlab/use-wallet-react";
 
 import { algodClient } from "@/lib/algorand";
-import { purchase } from "@/services/PurchaseService";
+import { purchase, assertStock } from "@/services/PurchaseService";
 import ConnectingWalletModal from "@/components/top-up/ConnectingWalletModal";
 
 interface CollectingWalletStepTwoProps {
@@ -59,10 +59,13 @@ export default function CollectingWalletStepThree({
 
     onQuantityChange?.(qty);
     setError(null);
-    setPhase("signing");
-    setModalOpen(true);
 
     try {
+      // Money-safety: confirm inventory before prompting the wallet to pay,
+      // so a sold-out never charges the buyer.
+      await assertStock(qty);
+      setPhase("signing");
+      setModalOpen(true);
       await purchase(qty, activeAddress, signTransactions, () =>
         setPhase("confirming"),
       );

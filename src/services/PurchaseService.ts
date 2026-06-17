@@ -37,14 +37,6 @@ export type PurchaseResult = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function boxName(prefix: string, body: Uint8Array): Uint8Array {
-  const pre = new TextEncoder().encode(prefix);
-  const out = new Uint8Array(pre.length + body.length);
-  out.set(pre, 0);
-  out.set(body, pre.length);
-  return out;
-}
-
 // Liczy SHA-256 — klucz dostawy w endpoincie odbioru to `sha256(deliveryPubkey)`.
 async function sha256(b: Uint8Array): Promise<Uint8Array> {
   //@ts-expect-error test
@@ -85,38 +77,25 @@ async function readGlobals() {
 
   return {
     price: read("pr"),
-    poolHead: read("ph"),
-    poolTail: read("pt"),
   };
 }
 
-const PURCHASE_METHOD = new algosdk.ABIMethod({
-  name: "purchaseCodes",
-  args: [
-    { type: "uint64", name: "qty" },
-    { type: "byte[32]", name: "deliveryPubkey" },
-  ],
-  returns: { type: "void" },
-});
-
+/**
+ * SNARK-sold purchase: a single payment to the app (treasury) account whose
+ * note carries the 32-byte delivery pubkey. The indexer watches this payment
+ * and delivers a pre-generated SNARK code (redeemed privately via proof). No
+ * on-chain sale pool / appcall — the privacy comes from SNARK redeem, not the
+ * purchase. amount = price × qty; the watcher derives qty back from it.
+ */
 async function buildPurchaseGroup(
   buyerAddress: string,
   qty: number,
   deliveryPub: Uint8Array,
 ): Promise<algosdk.Transaction[]> {
   if (qty < 1 || qty > 4) throw new Error("qty musi być w zakresie 1..4");
+  if (deliveryPub.length !== 32) throw new Error("deliveryPub must be 32 bytes");
 
-  const { price, poolHead, poolTail } = await readGlobals();
-  if (poolTail - poolHead < BigInt(qty))
-    throw new Error("za mało kodów w puli");
-
-  const hashes: Uint8Array[] = [];
-  for (let i = 0; i < qty; i++) {
-    const name = boxName("p:", algosdk.encodeUint64(poolHead + BigInt(i)));
-    const box = await ALGOD.getApplicationBoxByName(APP_ID, name).do();
-    hashes.push(box.value);
-  }
-
+  const { price } = await readGlobals();
   const total = price * BigInt(qty);
   const appAddress = algosdk.getApplicationAddress(APP_ID);
   const sp = await ALGOD.getTransactionParams().do();
@@ -125,34 +104,26 @@ async function buildPurchaseGroup(
     sender: buyerAddress,
     receiver: appAddress,
     amount: total,
+    note: deliveryPub,
     //@ts-expect-error number
     suggestedParams: { ...sp, fee: 1000n, flatFee: true },
   });
 
-  const boxes: algosdk.BoxReference[] = [];
-  for (let i = 0; i < qty; i++) {
-    boxes.push({
-      appIndex: 0,
-      name: boxName("p:", algosdk.encodeUint64(poolHead + BigInt(i))),
-    });
-    boxes.push({ appIndex: 0, name: boxName("c:", hashes[i]) });
+  return [payTxn];
+}
+
+/**
+ * Stock pre-check (money-safety): confirm the indexer has ≥ qty codes before
+ * the buyer pays, so a payment is only sent when inventory exists. Proxied
+ * through the same OHTTP path as delivery. Fails closed on error.
+ */
+export async function assertStock(qty: number): Promise<void> {
+  const res = await fetch(`/api/stock`, { cache: "no-store" });
+  if (!res.ok) throw new Error("nie można sprawdzić dostępności kodów");
+  const { available } = (await res.json()) as { available: number };
+  if (typeof available !== "number" || available < qty) {
+    throw new Error("za mało kodów w sprzedaży (sold out)");
   }
-
-  const appCallTxn = algosdk.makeApplicationNoOpTxnFromObject({
-    sender: buyerAddress,
-    appIndex: APP_ID,
-    appArgs: [
-      PURCHASE_METHOD.getSelector(),
-      new algosdk.ABIUintType(64).encode(BigInt(qty)),
-      deliveryPub,
-    ],
-    boxes,
-    //@ts-expect-error number
-    suggestedParams: { ...sp, fee: 2000n, flatFee: true },
-  });
-
-  algosdk.assignGroupID([payTxn, appCallTxn]);
-  return [payTxn, appCallTxn];
 }
 
 // ─── API public ────────────────────────────────────────────────────────────

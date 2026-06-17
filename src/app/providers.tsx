@@ -8,7 +8,7 @@ import {
 
 const manager = new WalletManager({
   wallets: [WalletId.PERA, WalletId.DEFLY, WalletId.LUTE],
-  defaultNetwork: NetworkId.TESTNET,
+  defaultNetwork: NetworkId.MAINNET,
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
