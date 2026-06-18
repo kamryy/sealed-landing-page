@@ -71,7 +71,9 @@ export function createOhttpClient(opts: OhttpClientOptions): OhttpClient {
         const response = await fetchImpl(relayUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'message/ohttp-req' },
-          body: encapsulated,
+          // Cast: encapsulated is Uint8Array<ArrayBufferLike>; some TS lib
+          // versions don't widen that to BodyInit. Valid fetch body at runtime.
+          body: encapsulated as unknown as BodyInit,
         });
 
         if (!response.ok) {
