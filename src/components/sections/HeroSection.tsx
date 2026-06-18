@@ -112,7 +112,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="relative z-0 mx-auto min-w-0 h-[clamp(24rem,60vw,36rem)] w-full max-w-[clamp(20rem,72vw,38rem)] overflow-visible">
+      <div className="relative z-0 mx-auto min-w-0 h-[clamp(34rem,60vw,42rem)] w-full max-w-[clamp(20rem,72vw,38rem)] overflow-visible">
         {/* Globe pulsing glow — locked to the globe container */}
         <div
           className="pointer-events-none absolute inset-0 z-[-1] m-auto h-[140%] translate-y-30 w-[160%] rounded-full opacity-0 -translate-x-5/12 lg:-translate-y-1/20 "

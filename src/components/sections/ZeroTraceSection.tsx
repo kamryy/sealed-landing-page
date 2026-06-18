@@ -104,7 +104,7 @@ function MobileCardStack() {
   }, []);
 
   return (
-    <div className="relative z-10 w-full px-4 md:hidden">
+    <div className="relative z-10 w-full px-4 [@media(min-width:768px)_and_(min-height:500px)]:hidden">
       <div className="mx-auto flex w-full max-w-128.5 flex-col gap-5">
         {SLIDES.map((slide, index) => {
           const isHighlighted = index === highlightedIndex;
@@ -266,7 +266,7 @@ function DesktopScrubScene() {
   return (
     <div
       ref={scrubWrapperRef}
-      className="relative hidden w-full md:block md:h-[400vh]"
+      className="relative hidden w-full [@media(min-width:768px)_and_(min-height:500px)]:block md:h-[400vh]"
     >
       <div className="sticky top-[var(--nav-h)] flex h-[calc(100svh-var(--nav-h))] w-full flex-col items-center pt-[clamp(0.5rem,2vh,1.5rem)]">
         {/* Dot-grid background */}
@@ -287,7 +287,7 @@ function DesktopScrubScene() {
 
         {/* Centre glow */}
         <div
-          className="pointer-events-none absolute left-1/2 mt-80 md:mt-60 z-0 h-[clamp(16rem,34vw,28rem)] w-[clamp(20rem,48vw,34rem)] -translate-x-1/2 rounded-full bg-sealed-teal blur-3xl md:top-68 md:blur-[96px] lg:top-72"
+          className="pointer-events-none absolute left-1/2 top-5/6 z-0 h-[clamp(16rem,34vw,28rem)] w-[clamp(20rem,48vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sealed-teal blur-3xl md:blur-[96px]"
           style={{ animation: 'sealedHaloPulse 5.5s ease-in-out infinite' }}
         />
 
@@ -332,8 +332,8 @@ function DesktopScrubScene() {
           </div>
 
           {/* Dashed vertical line */}
-          <div className="absolute -top-20 left-1/2 h-22 w-px -translate-x-1/2 ">
-            <span className="absolute left-1/2 top-10 z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sealed-teal shadow-[0_0_10px_rgba(107,250,214,0.9)]" />
+          <div className="absolute -top-[clamp(2rem,6vh,6rem)] left-1/2 h-[clamp(3rem,7vh,5.5rem)] w-px -translate-x-1/2 ">
+            <span className="absolute left-1/2 top-[45%] z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sealed-teal shadow-[0_0_10px_rgba(107,250,214,0.9)]" />
             <svg
               width="25"
               height="100%"
