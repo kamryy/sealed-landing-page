@@ -104,7 +104,7 @@ function MobileCardStack() {
   }, []);
 
   return (
-    <div className="relative z-10 w-full px-4 md:hidden">
+    <div className="relative z-10 w-full px-4 [@media(min-width:768px)_and_(min-height:400px)]:hidden">
       <div className="mx-auto flex w-full max-w-128.5 flex-col gap-5">
         {SLIDES.map((slide, index) => {
           const isHighlighted = index === highlightedIndex;
@@ -266,7 +266,7 @@ function DesktopScrubScene() {
   return (
     <div
       ref={scrubWrapperRef}
-      className="relative hidden w-full md:block md:h-[400vh]"
+      className="relative hidden w-full [@media(min-width:768px)_and_(min-height:400px)]:block md:h-[400vh]"
     >
       <div className="sticky top-[var(--nav-h)] flex h-[calc(100svh-var(--nav-h))] w-full flex-col items-center pt-[clamp(0.5rem,2vh,1.5rem)]">
         {/* Dot-grid background */}
