@@ -144,7 +144,13 @@ async function encapsulateRequest(
 
   // hpke-js 1.x requires importKey for ALL KEMs (including X25519); raw
   // Uint8Array yields "Cannot read properties of undefined (reading 'buffer')".
-  const recipientPublicKey = await suite.kem.importKey('raw', config.publicKey, true);
+  // hpke-js types importKey's raw key as ArrayBuffer; we pass the Uint8Array
+  // view on purpose (hpke reads its .buffer/byteOffset). Type-only cast.
+  const recipientPublicKey = await suite.kem.importKey(
+    'raw',
+    config.publicKey as unknown as ArrayBuffer,
+    true,
+  );
 
   const sender = await suite.createSenderContext({
     recipientPublicKey,
