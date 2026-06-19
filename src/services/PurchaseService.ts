@@ -71,7 +71,6 @@ async function readGlobals() {
       if (new TextDecoder().decode(key) === k)
         return BigInt(kv.value.uint ?? 0);
     }
-    //@ts-expect-error test
     return 0n;
   };
 
@@ -100,12 +99,25 @@ async function buildPurchaseGroup(
   const appAddress = algosdk.getApplicationAddress(APP_ID);
   const sp = await ALGOD.getTransactionParams().do();
 
+  // Algorand wymaga utrzymania min. salda (0.1 ALGO przy 0 ASA) — w innym wypadku
+  // węzeł odrzuca płatność. Sprawdzamy przed podpisem, by dać czytelny błąd.
+  const MIN_BALANCE = 100_000n; // 0.1 ALGO, konto bez assetów
+  const FEE = 1_000n;
+  const { amount } = await ALGOD.accountInformation(buyerAddress).do();
+  const spendable = BigInt(amount) - MIN_BALANCE - FEE;
+  if (total > spendable) {
+    const maxAlgo = Number(spendable > 0n ? spendable : 0n) / 1e6;
+    throw new Error(
+      `Niewystarczające saldo. Maksymalnie do wydania: ${maxAlgo} ALGO ` +
+        `(0.1 ALGO musi pozostać, by konto było aktywne).`,
+    );
+  }
+
   const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     sender: buyerAddress,
     receiver: appAddress,
     amount: total,
     note: deliveryPub,
-    //@ts-expect-error number
     suggestedParams: { ...sp, fee: 1000n, flatFee: true },
   });
 
