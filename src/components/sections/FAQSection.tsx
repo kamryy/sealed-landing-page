@@ -1,37 +1,27 @@
-import Image from 'next/image';
+import Image from "next/image";
 
-import GradientBadge from '@/components/ui/GradientBadge';
+import GradientBadge from "@/components/ui/GradientBadge";
 
 const faqItems = [
   {
-    question: 'What is Sealed?',
+    question: "What is Sealed?",
     answer:
-      'Sealed is a privacy-first messenger where message content is end-to-end encrypted, while fees and source code are publicly verifiable on blockchain.',
+      "Sealed is a privacy-first messenger where message content is end-to-end encrypted, while fees and source code are publicly verifiable on blockchain.",
   },
   {
-    question: 'Can anyone read my messages?',
+    question: "Can anyone read my messages?",
     answer:
-      'No. Messages are encrypted on your device and can only be decrypted by the intended recipients. Not even Sealed can read them.',
+      "No. Messages are encrypted on your device and can only be decrypted by the intended recipients. Not even Sealed can read them.",
   },
   {
-    question: 'What data is stored on the blockchain?',
+    question: "Does Sealed know who am I talking to and what about?",
     answer:
-      'Only encrypted message envelopes, payment records, and protocol parameters. Message content and user identities are never public.',
+      "No. Sealed does not have access to any of your contacts, messages, metadata and who is using the device. Each message is delivered to a unique, non-linkable destination.",
   },
   {
-    question: 'Does Sealed know who I am talking to?',
+    question: "Are my messages stored on any servers?",
     answer:
-      'No. Sealed does not have access to your contact graph. Each message is delivered to a unique, non-linkable destination.',
-  },
-  {
-    question: 'Why does sending a message cost money?',
-    answer:
-      'Messaging on Sealed is paid because each message is a real transaction on the blockchain, so it comes with a gas fee. A transparent application fee also prevents spam, removes ads and data monetization, and allows Sealed to operate without central servers.',
-  },
-  {
-    question: 'How much does a message cost?',
-    answer:
-      'The cost depends on your selected tariff or subscription and is calculated per 2 KB of encrypted data. The exact price is always shown before sending.',
+      "No. Sealed does not operate a central message database, instead we use a public blockchain chosen by the user. Messages exist only in encrypted form and are readable exclusively by participants.",
   },
 ];
 
@@ -82,7 +72,7 @@ export default function FAQSection() {
         <div className="mt-12 flex justify-center lg:mt-14">
           <a
             href="/faq"
-            className="rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-semibold text-black transition-opacity hover:opacity-90 md:text-lg"
+            className="mt-8 rounded-xl bg-sealed-teal px-5 py-3 font-lexend text-base font-semibold text-black transition-opacity hover:opacity-90 md:text-lg"
           >
             View all FAQs
           </a>
