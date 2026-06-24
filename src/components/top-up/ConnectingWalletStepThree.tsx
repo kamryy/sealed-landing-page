@@ -5,18 +5,20 @@ import Image from "next/image";
 import { useWallet } from "@txnlab/use-wallet-react";
 
 import { algodClient } from "@/lib/algorand";
-import { purchase, assertStock } from "@/services/PurchaseService";
+import { depositMany } from "@/services/MimcTopupService";
 import ConnectingWalletModal from "@/components/top-up/ConnectingWalletModal";
 
 interface CollectingWalletStepTwoProps {
   onStatusChange?: (step: number) => void;
   onQuantityChange?: (qty: number) => void;
+  onCodesGenerated?: (codes: string[]) => void;
   quantity?: number;
 }
 
 export default function CollectingWalletStepThree({
   onStatusChange,
   onQuantityChange,
+  onCodesGenerated,
   quantity,
 }: CollectingWalletStepTwoProps) {
   const { activeAddress, signTransactions } = useWallet();
@@ -32,6 +34,9 @@ export default function CollectingWalletStepThree({
 
   const [modalOpen, setModalOpen] = useState(false);
   const [phase, setPhase] = useState<"signing" | "confirming">("signing");
+  const [progress, setProgress] = useState<{ index: number; total: number } | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -61,18 +66,28 @@ export default function CollectingWalletStepThree({
     setError(null);
 
     try {
-      // Money-safety: confirm inventory before prompting the wallet to pay,
-      // so a sold-out never charges the buyer.
-      await assertStock(qty);
+      // MiMC client-side: generate + deposit one code at a time. Each code is a
+      // locally generated secret (the backup note) whose leaf is deposited into
+      // the on-chain MiMC tree — no server pool, so quantity is unbounded.
       setPhase("signing");
+      setProgress({ index: 1, total: qty });
       setModalOpen(true);
-      await purchase(qty, activeAddress, signTransactions, () =>
-        setPhase("confirming"),
+      const codes = await depositMany(
+        qty,
+        activeAddress,
+        signTransactions,
+        (p) => {
+          setPhase(p.phase);
+          setProgress({ index: p.index, total: p.total });
+        },
       );
+      onCodesGenerated?.(codes);
       setModalOpen(false);
+      setProgress(null);
       onStatusChange?.(4);
     } catch (err) {
       setModalOpen(false);
+      setProgress(null);
       setError(err instanceof Error ? err.message : "Unknown error");
     }
   };
@@ -82,12 +97,12 @@ export default function CollectingWalletStepThree({
     return `${text.slice(0, charsEachSide)}......${text.slice(-charsEachSide)}`;
   };
 
-  const MAX_CODES = 4;
-
   const countMessages = (event: React.ChangeEvent<HTMLInputElement>) => {
     const raw = event.target.value;
 
-    // Allow empty input; otherwise keep digits only and clamp to MAX_CODES.
+    // Allow empty input; otherwise keep digits only. No upper cap — MiMC codes
+    // are generated client-side, so quantity is unbounded (one deposit/signature
+    // per code; the buyer's balance is the only limit).
     if (raw === "") {
       setSelectedQuantity("");
       setMessagesCount(0);
@@ -97,9 +112,9 @@ export default function CollectingWalletStepThree({
     const digits = raw.replace(/\D/g, "");
     if (digits === "") return;
 
-    const clamped = Math.min(parseInt(digits), MAX_CODES);
-    setSelectedQuantity(String(clamped));
-    setMessagesCount(clamped * 500);
+    const qty = parseInt(digits);
+    setSelectedQuantity(String(qty));
+    setMessagesCount(qty * 500);
   };
 
   const countAlgo = (): number => {
@@ -159,7 +174,7 @@ export default function CollectingWalletStepThree({
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center  gap-4 sm:gap-8">
             <div className="flex flex-col items-start gap-2">
-              <p className="text-sm text-white">Code quantity (max {MAX_CODES})</p>
+              <p className="text-sm text-white">Code quantity</p>
               <input
                 placeholder="Insert number of credits"
                 className="w-full sm:w-fit bg-[#2a2a2a] border border-[#404040] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-sealed-teal transition"
@@ -235,8 +250,8 @@ export default function CollectingWalletStepThree({
           headerText={"Transaction"}
           contentText={
             phase === "signing"
-              ? "Please approve the transaction in Your wallet"
-              : "Transaction signed. Waiting for on-chain confirmation..."
+              ? `Approve code ${progress?.index ?? 1} of ${progress?.total ?? 1} in Your wallet`
+              : `Code ${progress?.index ?? 1} of ${progress?.total ?? 1} signed. Waiting for on-chain confirmation...`
           }
           contentHeaderText={
             phase === "signing"

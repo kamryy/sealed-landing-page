@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import Stepper from "@/components/top-up/Stepper";
 import ConnectingWalletStepOne from "@/components/top-up/ConnectingWalletStepOne";
@@ -8,82 +8,29 @@ import ConnectingWalletStepTwo from "./ConnectingWalletStepTwo";
 import ConnectingWalletStepThree from "./ConnectingWalletStepThree";
 import ConnectingWalletStepFour from "./ConnectingWalletStepFour";
 import ConnectingWalletStepFive from "./ConnectingWalletStepFive";
-import { fetchCodes } from "@/services/PurchaseService";
 
 export interface CodeItem {
   id: number;
   code: string;
 }
 
-function hexToUint8Array(hex: string): Uint8Array {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-  }
-  return bytes;
-}
-
 export default function ConnectingWalletContainer() {
   const [currentStep, setCurrentStep] = useState(1);
   const [quantity, setQuantity] = useState<number>(0);
 
+  // MiMC codes are generated client-side during the deposit step (3) and held
+  // here, then shown at step 5. No server fetch — the backup note IS the code.
   const [codes, setCodes] = useState<CodeItem[]>([]);
-  const [codesLoading, setCodesLoading] = useState(false);
-  const [codesError, setCodesError] = useState<string | null>(null);
-  const fetchStarted = useRef(false);
 
   const handleStatusChange = (step: number) => {
-    // Returning to the quantity step starts a fresh purchase — reset delivery state.
-    if (step === 3) {
-      fetchStarted.current = false;
-      setCodes([]);
-      setCodesError(null);
-      setCodesLoading(false);
-    }
+    // Returning to the quantity step starts a fresh top-up — clear prior codes.
+    if (step === 3) setCodes([]);
     setCurrentStep(step);
   };
 
-  // Delivery codes are fetched as soon as the user reaches the consent step (4),
-  // so they're ready by the time the user finishes reading and reaches step 5.
-  useEffect(() => {
-    if (currentStep !== 4 || fetchStarted.current) return;
-    fetchStarted.current = true;
-
-    let cancelled = false;
-
-    const loadCodes = async () => {
-      const pubHex = sessionStorage.getItem("deliveryPub") ?? "";
-      const privHex = sessionStorage.getItem("deliveryPriv") ?? "";
-      if (!pubHex || !privHex) {
-        if (!cancelled)
-          setCodesError("Missing delivery keys. Please retry the purchase.");
-        return;
-      }
-
-      if (!cancelled) setCodesLoading(true);
-      try {
-        const fetched = await fetchCodes(
-          hexToUint8Array(pubHex),
-          hexToUint8Array(privHex),
-        );
-        if (!cancelled)
-          setCodes(fetched.map((code, index) => ({ id: index + 1, code })));
-      } catch (err) {
-        if (!cancelled)
-          setCodesError(
-            err instanceof Error ? err.message : "Failed to fetch codes",
-          );
-      } finally {
-        if (!cancelled) setCodesLoading(false);
-      }
-    };
-
-    loadCodes();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [currentStep]);
+  const handleCodesGenerated = (generated: string[]) => {
+    setCodes(generated.map((code, index) => ({ id: index + 1, code })));
+  };
 
   return (
     <div className="w-full h-full">
@@ -107,6 +54,7 @@ export default function ConnectingWalletContainer() {
           <ConnectingWalletStepThree
             onStatusChange={handleStatusChange}
             onQuantityChange={setQuantity}
+            onCodesGenerated={handleCodesGenerated}
             quantity={quantity}
           />
         )}
@@ -119,8 +67,8 @@ export default function ConnectingWalletContainer() {
           <ConnectingWalletStepFive
             onStatusChange={handleStatusChange}
             codes={codes}
-            loading={codesLoading}
-            error={codesError}
+            loading={false}
+            error={null}
           />
         )}
       </div>
