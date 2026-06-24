@@ -45,14 +45,18 @@ export interface DepositGroupParams {
   leaf: Uint8Array;
 }
 
-/** Build the 2-txn deposit group [pay(price->app, fee 1000), appcall
- *  deposit(leaf) fee 40000 + boxes mfs/mqr]. Both signed by the buyer. */
-export async function buildDepositGroup(
+/** Build the 2-txn deposit pair [pay(price->app, fee 1000), appcall
+ *  deposit(leaf) fee 40000 + boxes mfs/mqr], UNGROUPED. Both signed by the
+ *  buyer. Pass shared suggestedParams so many pairs can be batched into one
+ *  atomic group (≤8 deposits = ≤16 txns per group) and signed in one prompt.
+ *  Within a group the AVM executes deposits sequentially, so each inserts a
+ *  distinct consecutive leaf. */
+export function buildDepositPair(
   p: DepositGroupParams,
-): Promise<algosdk.Transaction[]> {
+  sp: algosdk.SuggestedParams,
+): algosdk.Transaction[] {
   if (p.leaf.length !== 32) throw new Error("leaf must be 32 bytes");
   const appAddress = algosdk.getApplicationAddress(p.appId);
-  const sp = await p.algod.getTransactionParams().do();
 
   const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     sender: p.buyer,
@@ -74,8 +78,17 @@ export async function buildDepositGroup(
     note: randomNote(),
   });
 
-  algosdk.assignGroupID([payTxn, appCallTxn]);
   return [payTxn, appCallTxn];
+}
+
+/** Single-deposit convenience: one grouped pair. */
+export async function buildDepositGroup(
+  p: DepositGroupParams,
+): Promise<algosdk.Transaction[]> {
+  const sp = await p.algod.getTransactionParams().do();
+  const pair = buildDepositPair(p, sp);
+  algosdk.assignGroupID(pair);
+  return pair;
 }
 
 // --- redeem ------------------------------------------------------------------

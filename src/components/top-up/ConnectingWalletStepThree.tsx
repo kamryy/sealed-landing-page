@@ -34,7 +34,7 @@ export default function CollectingWalletStepThree({
 
   const [modalOpen, setModalOpen] = useState(false);
   const [phase, setPhase] = useState<"signing" | "confirming">("signing");
-  const [progress, setProgress] = useState<{ index: number; total: number } | null>(
+  const [progress, setProgress] = useState<{ confirmed: number; total: number } | null>(
     null,
   );
   const [error, setError] = useState<string | null>(null);
@@ -66,24 +66,32 @@ export default function CollectingWalletStepThree({
     setError(null);
 
     try {
-      // MiMC client-side: generate + deposit one code at a time. Each code is a
-      // locally generated secret (the backup note) whose leaf is deposited into
-      // the on-chain MiMC tree — no server pool, so quantity is unbounded.
+      // MiMC client-side: generate all codes, deposit their leaves in ONE wallet
+      // signature (batched atomic groups of ≤8). Each code is a locally
+      // generated secret (the backup note) — no server pool, quantity unbounded.
       setPhase("signing");
-      setProgress({ index: 1, total: qty });
+      setProgress({ confirmed: 0, total: qty });
       setModalOpen(true);
-      const codes = await depositMany(
+      const outcome = await depositMany(
         qty,
         activeAddress,
         signTransactions,
         (p) => {
           setPhase(p.phase);
-          setProgress({ index: p.index, total: p.total });
+          setProgress({ confirmed: p.confirmed, total: p.total });
         },
       );
-      onCodesGenerated?.(codes);
+      onCodesGenerated?.(outcome.codes);
       setModalOpen(false);
       setProgress(null);
+      // Partial success: some groups failed but at least one code landed. Carry
+      // the confirmed codes forward and surface what didn't (nothing was charged
+      // for the failed ones — each group is atomic).
+      if (outcome.failed > 0) {
+        setError(
+          `${outcome.failed} of ${qty} code(s) failed and were not charged: ${outcome.errors.join("; ")}`,
+        );
+      }
       onStatusChange?.(4);
     } catch (err) {
       setModalOpen(false);
@@ -250,12 +258,12 @@ export default function CollectingWalletStepThree({
           headerText={"Transaction"}
           contentText={
             phase === "signing"
-              ? `Approve code ${progress?.index ?? 1} of ${progress?.total ?? 1} in Your wallet`
-              : `Code ${progress?.index ?? 1} of ${progress?.total ?? 1} signed. Waiting for on-chain confirmation...`
+              ? `Approve ${progress?.total ?? 1} code(s) in Your wallet — one signature`
+              : `Confirming on-chain… ${progress?.confirmed ?? 0} of ${progress?.total ?? 1} done`
           }
           contentHeaderText={
             phase === "signing"
-              ? "Waiting for Transaction"
+              ? "Waiting for Signature"
               : "Confirming Transaction"
           }
           isLoadingModal={true}
