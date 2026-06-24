@@ -7,11 +7,13 @@
 // so there is NO server stock limit (quantity is unbounded). Redeem happens
 // later in the Sealed app from a fresh, unlinked wallet via ZK proof.
 //
-// All codes are signed in ONE wallet prompt: deposits are batched into atomic
-// groups of up to 8 (Algorand caps a group at 16 txns; each deposit is 2 txns)
-// and every group is signed in a single signTransactions call. Each group is
-// atomic — it confirms wholly or reverts wholly (no partial charge) — so we
-// report exactly which codes landed on-chain.
+// All codes are signed in ONE wallet prompt. The contract's `deposit` asserts
+// groupSize==2 (a [pay, appcall] pair, appcall at index 1), so deposits CANNOT
+// share a group — each code is its own 2-txn group. We still sign every group
+// in a single signTransactions call (wallets accept multiple groups per prompt),
+// then submit each group independently. A group is atomic — it confirms wholly
+// or reverts wholly (no partial charge) — so we report exactly which codes
+// landed on-chain.
 
 import algosdk from "algosdk";
 import { ALGOD } from "@/services/PurchaseService";
@@ -25,8 +27,6 @@ import {
 
 const APP_ID = BigInt(process.env.NEXT_PUBLIC_SEALED_APP_ID ?? "763452863");
 
-/** Algorand caps an atomic group at 16 txns; each deposit is 2 (pay + appcall). */
-const MAX_DEPOSITS_PER_GROUP = 8;
 /** Per-code fee: payment 0.001 + appcall 0.04 = 0.041 ALGO (µ). */
 const FEES_PER_CODE = 41_000n;
 /** Keep this much (µALGO) spare for the account min-balance after paying. */
@@ -123,23 +123,16 @@ export async function depositMany(
     return { note: toBackupNote(secret), leaf: to32BE(leafFromSecret(secret)) };
   });
 
-  // 2. Build ungrouped pairs, then chunk into atomic groups of ≤8 deposits.
-  const groups: { txns: algosdk.Transaction[]; itemIdx: number[] }[] = [];
-  for (let i = 0; i < qty; i += MAX_DEPOSITS_PER_GROUP) {
-    const idxs: number[] = [];
-    const txns: algosdk.Transaction[] = [];
-    for (let j = i; j < Math.min(i + MAX_DEPOSITS_PER_GROUP, qty); j++) {
-      txns.push(
-        ...buildDepositPair(
-          { algod: ALGOD, appId: APP_ID, buyer, price, leaf: items[j].leaf },
-          sp,
-        ),
-      );
-      idxs.push(j);
-    }
-    algosdk.assignGroupID(txns);
-    groups.push({ txns, itemIdx: idxs });
-  }
+  // 2. Each deposit is its OWN 2-txn group [pay, appcall] — the contract asserts
+  //    groupSize==2 with the appcall at index 1, so deposits cannot be merged.
+  const groups = items.map((it, j) => {
+    const pair = buildDepositPair(
+      { algod: ALGOD, appId: APP_ID, buyer, price, leaf: it.leaf },
+      sp,
+    );
+    algosdk.assignGroupID(pair);
+    return { txns: pair, itemIdx: [j] };
+  });
 
   // 3. ONE signature for everything (all groups in a single prompt).
   onProgress?.({ phase: "signing", confirmed: 0, total: qty });
