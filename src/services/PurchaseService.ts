@@ -3,7 +3,7 @@ import { Aead, CipherSuite, Kdf, Kem } from "hpke-js";
 
 // ─── Konfiguracja ────────────────────────────────────────────────────────────
 
-const APP_ID = BigInt(process.env.NEXT_PUBLIC_SEALED_APP_ID ?? "763452863");
+const APP_ID = BigInt(process.env.NEXT_PUBLIC_SEALED_APP_ID ?? "3615523287");
 
 const ALGOD_BASE = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/algod`;
 
