@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import ConnectingWalletHeader from "./ConnectingWalletHeader";
+import Link from "next/link";
 
 interface CollectingWalletStepTwoProps {
   onStatusChange?: (step: number) => void;
@@ -54,6 +55,14 @@ export default function CollectingWalletStepTwo({
             Check your updated message balance after completion
           </li>
         </ol>
+
+        <Link
+          className="w-fit mt-6 text-left text-sealed-teal hover:underline transition-transform duration-200 hover:scale-[1.02]"
+          href="https://docs.sealed.channel/introduction/step-by-step"
+          target="_blank"
+        >
+          Step-by-step guide
+        </Link>
       </div>
 
       <div className="flex items-center gap-4 w-full justify-end">
