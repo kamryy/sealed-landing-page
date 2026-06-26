@@ -67,7 +67,8 @@ export async function readPrice(): Promise<bigint> {
       kv.key instanceof Uint8Array
         ? kv.key
         : Uint8Array.from(atob(String(kv.key)), (c) => c.charCodeAt(0));
-    if (new TextDecoder().decode(key) === "pr") return BigInt(kv.value.uint ?? 0);
+    if (new TextDecoder().decode(key) === "pr")
+      return BigInt(kv.value.uint ?? 0);
   }
   throw new Error("price (pr) not set on app");
 }
@@ -109,8 +110,14 @@ export async function depositMany(
   if (BigInt(acct.amount) < needed) {
     const have = (Number(acct.amount) / 1e6).toFixed(3);
     const want = (Number(needed) / 1e6).toFixed(3);
+    const codeCost = (
+      Number((price + FEES_PER_CODE) * BigInt(qty)) / 1e6
+    ).toFixed(3);
+    const buffer = (Number(MIN_BALANCE_BUFFER) / 1e6).toFixed(3);
     throw new Error(
-      `Insufficient balance for ${qty} code(s): need ~${want} ALGO, have ${have}.`,
+      `Insufficient balance: need ~${want} ALGO, have ${have}. ` +
+        `That's ${codeCost} for ${qty} code(s) plus ${buffer} ALGO that must ` +
+        `stay in your account to keep it active (Algorand min-balance).`,
     );
   }
 
@@ -167,12 +174,16 @@ export async function depositMany(
       confirmed += g.itemIdx.length;
       onProgress?.({ phase: "confirming", confirmed, total: qty });
     } catch (err) {
-      errors.add(err instanceof Error ? err.message : "A deposit group failed.");
+      errors.add(
+        err instanceof Error ? err.message : "A deposit group failed.",
+      );
     }
   }
 
   if (codes.length === 0) {
-    throw new Error([...errors][0] ?? "All deposits failed; nothing was charged.");
+    throw new Error(
+      [...errors][0] ?? "All deposits failed; nothing was charged.",
+    );
   }
   return { codes, failed: qty - codes.length, errors: [...errors] };
 }
