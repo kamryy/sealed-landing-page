@@ -23,19 +23,14 @@ const faqItems = [
       "Only encrypted message envelopes, payment records, and protocol parameters. Message content and user identities are never public.",
   },
   {
-    question: "Does Sealed know who I am talking to?",
+    question: "Does Sealed know who am I talking to and what about?",
     answer:
       "No. Sealed does not have access to your contact graph. Each message is delivered to a unique, non-linkable destination.",
   },
   {
     question: "Why does sending a message cost money?",
     answer:
-      "Messaging on Sealed is paid because each message is a real transaction on the blockchain, so it comes with a gas fee. A transparent application fee also prevents spam, removes ads and data monetization, and allows Sealed to operate without central servers.",
-  },
-  {
-    question: "How much does a message cost?",
-    answer:
-      "The cost depends on your selected tariff or subscription and is calculated per 2 KB of encrypted data. The exact price is always shown before sending.",
+      "Messaging on Sealed is paid because each message is a real transaction on the blockchain, so it comes with a gas fee. A transparent application fee also prevents spam, removes ads and data monetization. The cost depends on your selected tariff or subscription and is calculated per 2 KB of encrypted data.",
   },
   {
     question: "Are message sizes or metadata exposed?",
@@ -53,14 +48,9 @@ const faqItems = [
       "Yes. Each device has its own cryptographic keys and can be independently added or removed from your account.",
   },
   {
-    question: "Are my messages stored on Sealed servers?",
+    question: "Are my messages stored on any servers?",
     answer:
       "No. Sealed does not operate a central message database, instead we use a public blockchain chosen by the user. Messages exist only in encrypted form and are readable exclusively by participants.",
-  },
-  {
-    question: "Is Sealed suitable for private or sensitive conversations?",
-    answer:
-      "Yes. Sealed is designed for situations where confidentiality and minimal metadata exposure are critical.",
   },
   {
     question: "Does Sealed rely on trust in a central operator?",
@@ -73,33 +63,24 @@ const faqItems = [
       "No. All cryptography and blockchain interactions are handled automatically in the background.",
   },
   {
-    question: "What is the Sealed utility token used for?",
-    answer:
-      "The token is used for staking, participating in protocol incentives, and sharing in application-level revenue share.",
-  },
-  {
-    question: "Do I need the token to send or receive messages?",
-    answer: "No. Messaging functionality does not require holding the token.",
-  },
-  {
-    question: "How does staking the token work?",
-    answer:
-      "Stakers lock their tokens in a smart contract and receive a proportional share of messaging fees distributed by the protocol.",
-  },
-  {
-    question: "Where do staking rewards come from?",
-    answer:
-      "Rewards come directly from real usage fees paid by users, not from inflation or emissions and paid out in blockchain's native currency.",
-  },
-  {
-    question: "Does the token affect message privacy or encryption?",
-    answer:
-      "No. Token ownership has no impact on encryption, access to messages, or user privacy.",
-  },
-  {
     question: "Can Sealed share my conversations with anyone?",
     answer:
       "No. Sealed cannot share message content with anyone because it does not have access to it. Messages are end-to-end encrypted and only participants hold the decryption keys.",
+  },
+  {
+    question: "Why is Sealed launching on Algorand?",
+    answer:
+      "Sealed is launching on Algorand as it provides a fast, efficient and one of the safest and most scalable blockchain environment. Sealed brings a privacy-first communication layer to Algorand users, builders and ecosystem participants.",
+  },
+  {
+    question: "Is Sealed just another messenger?",
+    answer:
+      "No. Sealed App starts with private communication. It is built first for those who care the most about privacy, identity and reduced exposure. The broader Sealed vision goes beyond private messaging and moves toward Sealed Channels - controlled communication environments for high-trust operational processes.",
+  },
+  {
+    question: "What are Sealed Channels?",
+    answer:
+      "Sealed Channels are the next strategic layer of the Sealed ecosystem. A Sealed Channel is not a normal chat channel like Slack, Discord or Telegram. A Sealed Channel is a controlled communication environment for a specific high-trust operational process.",
   },
 ];
 
