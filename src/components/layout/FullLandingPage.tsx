@@ -1,4 +1,4 @@
-import BackgroundEffects from "@/components/layout/BackgroundEffects";
+// import BackgroundEffects from "@/components/layout/BackgroundEffects";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import FAQSection from "@/components/sections/FAQSection";
@@ -9,6 +9,7 @@ import PrivacyFeaturesSection from "@/components/sections/PrivacyFeaturesSection
 // import TokenomicsSection from "@/components/sections/TokenomicsSection";
 import WaitlistSection from "@/components/sections/WaitlistSection";
 import ZeroTraceSection from "@/components/sections/ZeroTraceSection";
+import RoadmapSection from "../sections/RoadmapSection";
 
 /**
  * Sealed landing page root.
@@ -24,7 +25,7 @@ import ZeroTraceSection from "@/components/sections/ZeroTraceSection";
 export default function FullLandingPage() {
   return (
     <main className="relative min-h-screen overflow-x-clip pb-12 pt-0 lg:px-12 lg:pt-6">
-      <BackgroundEffects />
+      {/* <BackgroundEffects /> */}
 
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <Navbar />
@@ -44,8 +45,12 @@ export default function FullLandingPage() {
           </div>
         </div>
 
+        <div className="section-gap-md relative px-8 lg:px-4 cv-auto">
+          <RoadmapSection />
+        </div>
+
         {/*commented for now, because we dont want to display it */}
-        
+
         {/* <div className="section-four-stack relative px-8 lg:px-4 cv-auto">
           <TokenomicsSection />
         </div> */}

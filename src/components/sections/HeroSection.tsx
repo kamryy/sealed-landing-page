@@ -1,10 +1,10 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 import {
   ReceiverChatPreview,
   SenderChatPreview,
-} from '@/components/ui/ChatPreview';
-import GradientBadge from '@/components/ui/GradientBadge';
+} from "@/components/ui/ChatPreview";
+import GradientBadge from "@/components/ui/GradientBadge";
 
 export default function HeroSection() {
   return (
@@ -57,12 +57,9 @@ export default function HeroSection() {
             </svg>
             Download (APK)
           </a>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-end gap-2">
             <div className="flex items-center gap-3">
-              <a
-              
-                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 opacity-55 transition-all duration-200 hover:scale-[1.03] hover:opacity-100"
-              >
+              <a className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 transition-all duration-200 hover:scale-[1.03] cursor-pointer">
                 <svg
                   width="22"
                   height="22"
@@ -70,21 +67,34 @@ export default function HeroSection() {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                 >
-                  <path d="M3.6 2.2a1.5 1.5 0 0 0-.6 1.2v17.2a1.5 1.5 0 0 0 .6 1.2l.1.1L13.4 12 3.7 2.1l-.1.1Z" fill="#00D3FF" />
-                  <path d="M17 15.6 13.4 12l3.6-3.6 4.3 2.4c1.2.7 1.2 1.8 0 2.5L17 15.6Z" fill="#FFCE00" />
-                  <path d="m17 15.6-3.6-3.6-9.8 9.9c.4.4 1.1.5 1.8.1L17 15.6Z" fill="#FF3B44" />
-                  <path d="M5.4 1.9 17 8.4l-3.6 3.6L3.6 2.2c.5-.5 1.2-.5 1.8-.3Z" fill="#00F076" />
+                  <path
+                    d="M3.6 2.2a1.5 1.5 0 0 0-.6 1.2v17.2a1.5 1.5 0 0 0 .6 1.2l.1.1L13.4 12 3.7 2.1l-.1.1Z"
+                    fill="#00D3FF"
+                  />
+                  <path
+                    d="M17 15.6 13.4 12l3.6-3.6 4.3 2.4c1.2.7 1.2 1.8 0 2.5L17 15.6Z"
+                    fill="#FFCE00"
+                  />
+                  <path
+                    d="m17 15.6-3.6-3.6-9.8 9.9c.4.4 1.1.5 1.8.1L17 15.6Z"
+                    fill="#FF3B44"
+                  />
+                  <path
+                    d="M5.4 1.9 17 8.4l-3.6 3.6L3.6 2.2c.5-.5 1.2-.5 1.8-.3Z"
+                    fill="#00F076"
+                  />
                 </svg>
                 <span className="flex flex-col text-left leading-none text-white">
                   <span className="text-[9px] font-normal tracking-wide text-white/80">
                     Get it on
                   </span>
                   <span className="-mt-0.5 text-base font-semibold">
-                    Google Play 
+                    Google Play
                   </span>
                 </span>
               </a>
-              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 opacity-55 transition-all duration-200 hover:scale-[1.03] hover:opacity-100">
+
+              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 opacity-55 transition-all duration-200">
                 <svg
                   width="20"
                   height="20"
@@ -105,8 +115,8 @@ export default function HeroSection() {
                 </span>
               </div>
             </div>
-            <span className="text-sm font-medium text-white/60">
-               coming soon
+            <span className="text-sm font-medium text-white/60 mr-6">
+              coming soon
             </span>
           </div>
         </div>
@@ -118,13 +128,13 @@ export default function HeroSection() {
           className="pointer-events-none absolute inset-0 z-[-1] m-auto h-[140%] translate-y-30 w-[160%] rounded-full opacity-0 -translate-x-5/12 lg:-translate-y-1/20 "
           style={{
             background:
-              'radial-gradient(circle at 50% 40%, rgba(107,250,214,0.18) 0%, rgba(107,250,214,0.16) 30%, transparent 50%)',
-            animation: 'sealedGlobePulse 6s ease-in-out infinite',
+              "radial-gradient(circle at 50% 40%, rgba(107,250,214,0.18) 0%, rgba(107,250,214,0.16) 30%, transparent 50%)",
+            animation: "sealedGlobePulse 6s ease-in-out infinite",
           }}
         />
         {/* Globe core */}
         <div className="px-4">
-          {' '}
+          {" "}
           <Image
             src="/assets/globe.png"
             alt=""
@@ -139,7 +149,7 @@ export default function HeroSection() {
           className="absolute -bottom-30 -right-50 z-10 h-[90%] w-[120%] overflow-visible rounded-full"
           style={{
             background:
-              'radial-gradient(circle at 50% 50%, rgba(6,9,8,0.9) 0%, rgba(6,9,8,0.7) 40%, transparent 70%)',
+              "radial-gradient(circle at 50% 50%, rgba(6,9,8,0.9) 0%, rgba(6,9,8,0.7) 40%, transparent 70%)",
           }}
         ></div>
       </div>
