@@ -59,7 +59,11 @@ export default function HeroSection() {
           </a>
           <div className="flex flex-col items-end gap-2">
             <div className="flex items-center gap-3">
-              <a className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 transition-all duration-200 hover:scale-[1.03] cursor-pointer">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.sunship.sealed"
+                target="_blank"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black px-3.5 py-2 transition-all duration-200 hover:scale-[1.03] cursor-pointer"
+              >
                 <svg
                   width="22"
                   height="22"
